@@ -15,9 +15,26 @@ echo_current_dirpath() {
     echo "\w"
 }
 
-# git branch echo:
+# git branch echo1:
+fetch_git_branch() {
+    git rev-parse --abbrev-ref HEAD 2>/dev/null
+}
+
+# git branch echo2:
 parse_git_branch() {
-    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
+}
+
+parse_pyenv() {
+    if [[ -n "$VIRTUAL_ENV" ]]; then
+        echo " ($(basename "$VIRTUAL_ENV"))"
+    fi
+}
+
+parse_conda() {
+    if [[ -n "$CONDA_DEFAULT_ENV" ]]; then
+        echo " ($CONDA_DEFAULT_ENV)"
+    fi
 }
 
 # Prompt symbol options:
@@ -230,6 +247,26 @@ function conda_prompt {
     # echo "Prefix (3): $PREFIX"
 
     echo $PREFIX
+}
+
+function git_prompt {
+    local tag_color="$1"
+    local add_wrap="${2:-true}"
+
+    local GIT_BRANCH=$(parse_git_branch)
+    local GIT_SYMBOL=$(define_prompt_symbol "$tag_symbol")
+
+    if [[ -n "$GIT_BRANCH" ]]; then
+        if [[ "$add_wrap" == true ]]; then
+            GIT_BRANCH="git:($GIT_BRANCH)"
+        fi
+        
+        if [[ -n "$tag_color" ]]; then
+            echo "%F{$tag_color}$GIT_BRANCH%f"
+        else
+            echo "$GIT_BRANCH"
+        fi
+    fi
 }
 
 # Example prompt specification:
