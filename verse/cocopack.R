@@ -1,5 +1,58 @@
 if (!require(pacman)) {install.packages("pacman")}
-pacman::p_load('scales', 'progress', 'boot', 'rstatix', 'tidyverse')
+pacman::p_load('this.path', 'scales', 'psych', 'progress',
+               'viridis', 'cowplot', 'patchwork', 
+               'patchwork', 'ggfortify', 'ggh4x','tidytext', 'tidyverse')
+
+### plot utils -------------------------------------------------------
+
+cocopack_theme <- function(which='default', text_size=24) {
+  if (which == 'default') {
+    theme_bw() + theme(
+      text = element_text(size = text_size),
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+    ) else {
+      stop("Invalid cocopack theme; choose from c('default')")
+    }
+  }
+}
+
+closer_legend <- function(position='bottom') {
+  theme(legend.justification="center",
+        legend.position=position, 
+        legend.box.margin=margin(-12,0,0,0))
+}
+
+view_ggplot2_shapes <- function() {
+  data.frame(x = 1:25, y = rep(1, 25), shape = 0:24) %>%
+  ggplot(aes(x = x, y = y)) +
+    geom_point(aes(shape = factor(shape)), 
+              size = 5, fill = "lightblue") +
+    scale_shape_manual(values = 0:24) +
+    labs(title = "ggplot2 Shape Palette", 
+        shape = "Shape ID") +
+    theme_minimal() + coord_fixed(ratio = 25) +
+    theme(axis.title = element_blank(),
+          axis.ticks = element_blank(),
+          axis.text.y = element_blank(),
+          axis.text.x = element_blank(),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank())
+}
+
+### data utils -----------------------------------------------------
+
+read_csv_add_name <- function(file) {
+  read_csv(file) %>% mutate(filename = file)
+}
+
+get_package_bibtex <- function(x) {
+    print(x, bibtex = TRUE)
+}
+
+### boot utils -----------------------------------------------------
+
+pacman::p_load('scales', 'progress', 'boot', 'ggstatsplot', 'tidyverse')
 
 run_bootstrap <- function(data_frame, group_vars, boot_fn, times=1000, 
                           hypothesis=0, parse=TRUE, simplify=TRUE) {
@@ -61,8 +114,7 @@ run_bootstrap <- function(data_frame, group_vars, boot_fn, times=1000,
   return(result)
 }
 
-label_significance <- 
-  function(results, p_col='p', alpha=0.5, alpha_low=0.001) {
+label_significance <- function(results, p_col='p', alpha=0.5, alpha_low=0.001) {
     p_values = c(1e-5, 1e-4, 0.001, 0.01, 0.05) %>%
       keep(function(x) {x >= alpha_low & x <= alpha})
     
@@ -76,20 +128,21 @@ label_significance <-
   }
 
 spearman_boot <- function(df, x_var, y_var, group_vars, R=1000, parse=TRUE) {
-  # spearman with suppressed tie warnings
+  # vectorized spearman correlation function
   spearman_corr <- function(data, indices=NULL, x_var, y_var) {
     if (is.null(indices)) {
-        x <- data[[x_var]]
-        y <- data[[x_var]]
+      x <- data[[x_var]]
+      y <- data[[x_var]]
     } else {
-        x <- data[indices, ][[x_var]]
-        y <- data[indices, ][[y_var]]
+      x <- data[indices, ][[x_var]]
+      y <- data[indices, ][[y_var]]
     }
     cor_test_result <- cor.test(x, y, method = "spearman")
     # Extract the correlation coefficient
     c(correlation = cor_test_result$estimate) 
   }
 
+  # spearman with suppressed tie warnings
   boot_fn <- function(data, indices) {
     suppressWarnings(spearman_corr(data, indices, x_var, y_var))
   }
@@ -105,5 +158,4 @@ spearman_boot <- function(df, x_var, y_var, group_vars, R=1000, parse=TRUE) {
              cor_lower = boot_lower_ci,
              cor_upper = boot_upper_ci)
   }
-  
 }
