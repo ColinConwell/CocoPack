@@ -1,20 +1,23 @@
-import sys
-import argparse
+import os, sys, subprocess
 from pathlib import Path
-import subprocess
-import os
+
+from warnings import warn
 
 SHELL_COMMANDS = {
     'ezshell': 'ezshell.sh',
-    'prompt': 'prompt.sh',
     'colorcode': 'colorcode.sh',
-    'jekyll': 'helpers/jekyll.sh',
 }
 
 def get_script_path(script_name):
     """Get the full path to a shell script"""
-    package_dir = Path(__file__).parent.parent.parent.parent
+    warn("get_script_path is under development. Please use with caution.")
+    package_dir = Path(__file__).parent.parent
     return package_dir / 'shell' / script_name
+
+def run_script(script_path, *args):
+    """Run a shell script with arguments"""
+    cmd = ['/bin/bash', str(script_path)] + list(args)
+    subprocess.run(cmd, check=True)
 
 def print_usage():
     """Print usage information"""

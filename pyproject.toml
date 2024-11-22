@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "coco-pack"
+name = "cocopack"
 version = "0.1.0"
 description = "Programmatic toolkits for Python and shell scripting"
 readme = "README.md"
@@ -14,7 +14,6 @@ authors = [
 ]
 dependencies = [
     "ipython>=8.0.1",
-    "jupyter>=4.0.0"
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -27,7 +26,7 @@ classifiers = [
 
 [project.optional-dependencies]
 shell = []
-namespaced = []  # For users who prefer cocopack namespace only
+namespaced = []
 dev = [
     "pytest>=7.0.0",
     "black>=23.0.0",
@@ -35,16 +34,10 @@ dev = [
 ]
 
 [project.scripts]
-# Main command
-cocopack = "cocopack.shell.cli:main"
+cocopack = "cocopack.shellpack.cli:main"
 
-# Direct shell commands (default)
-path-cleanup = "cocopack.shell.commands:path_cleanup_cmd"
-color-wrap = "cocopack.shell.commands:color_wrap_cmd"
-jekyll-restart = "cocopack.shell.commands:jekyll_restart_cmd"
-jekyll-reload = "cocopack.shell.commands:jekyll_reload_cmd"
-jekyll-restart-plus = "cocopack.shell.commands:jekyll_restart_plus_cmd"
-clear-git-history = "cocopack.shell.commands:clear_git_history_cmd"
+# Direct shell commands (testing)
+color-wrap = "cocopack.shellpack.commands:color_wrap"
 
 [project.urls]
 Homepage = "https://github.com/ColinConwell/Coco-Pack"
@@ -54,7 +47,7 @@ BugTracker = "https://github.com/ColinConwell/Coco-Pack/issues"
 
 [tool.hatch.build]
 packages = ["python/cocopack"]
-# Include shell scripts in the package data
+# Include shell scripts in package data
 artifacts = [
     "shell/scripts/*.sh",
     "shell/helpers/*.sh",
@@ -63,11 +56,19 @@ artifacts = [
 
 # New section for shell script installation
 [tool.hatch.build.targets.wheel.scripts]
-coco-colorcode = "shell/colorcode.sh"
-coco-prompt = "shell/prompt.sh"
-coco-ezshell = "shell/ezshell.sh"
-coco-jekyll = "shell/helpers/jekyll.sh"
-clear-git-history = "shell/scripts/clear_git_history.sh"
+cocopack-colorcode = "shell/colorcode.sh"
+cocopack-prompt = "shell/prompt.sh"
+cocopack-ezshell = "shell/ezshell.sh"
+cocopack-jekyll = "shell/helpers/jekyll.sh"
+
+[tool.hatch.envs.docs]
+dependencies = [
+    "sphinx>=7.0.0",
+    "sphinx-rtd-theme>=1.0.0",
+    "myst-parser>=1.0.0",
+]
+[tool.hatch.envs.docs.scripts]
+build = "sphinx-build -b html docs/source docs/build"
 
 [tool.hatch.envs.default]
 dependencies = [
@@ -100,15 +101,6 @@ style = [
 ]
 type = "mypy --install-types --non-interactive {args:python/cocopack}"
 check = ["style", "type"]
-
-[tool.hatch.envs.docs]
-dependencies = [
-    "sphinx>=7.0.0",
-    "sphinx-rtd-theme>=1.0.0",
-    "myst-parser>=1.0.0",
-]
-[tool.hatch.envs.docs.scripts]
-build = "sphinx-build -b html docs/source docs/build"
 
 [tool.black]
 line-length = 88

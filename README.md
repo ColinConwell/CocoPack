@@ -1,8 +1,15 @@
 # Coco-Pack <img src="logo.png" align="right" width="224px" height="224px" />
 
-<p style="text-align: justify;">Programmatic toolkits for Python, R, and shell scripting. Coco-Pack provides a unified collection of utilities to streamline your development workflow across multiple languages.</p>
+Programmatic toolkits for Python, R, and shell scripting. Coco-Pack provides a unified collection of utilities to streamline your development workflow across multiple languages.
 
-<p style="text-align: justify;"><i>Caveat Emptor</i>: The core functionality of this codebase is (largely) human-built and human-tested. However, much of the documentation and supporting infrastructure (e.g. installation instructions) has been generated with the help of generative AI. Please use with caution and feel free to contribute to the project if you have any improvements or corrections.</p>
+*Caveat Emptor*: The core functionality of this codebase is (largely) human-built and human-tested. However, much of the documentation and supporting infrastructure (e.g. installation instructions) has been generated with the help of generative AI. Please use with caution and feel free to contribute to the project if you have any improvements or corrections.
+
+Functionality Status:
+- [x] Python
+- [ ] Shell
+- [ ] R Package
+
+(Shell commands through the CLI are currently out-of-order.)
 
 ## Quick-Start
 
@@ -55,6 +62,16 @@ pip uninstall coco-pack
 This will remove both Python and shell components. You should also remove any references to cocopack commands from your .bashrc or .zshrc.
 
 ### R Package (Coco-Pack-R)
+
+To source the R code from cocopack, you can run the following command:
+
+```R
+if (!require(pacman)) {install.packages("pacman")}
+pacman::p_load('devtools', 'glue')
+
+repo_url <- 'https://raw.githubusercontent.com/ColinConwell/Coco-Pack/refs/heads/main'
+remotes::source_url(glue('{repo_url}/verse/cocopack.R'))
+```
 
 See [verse/README.md](./verse/README.md) for R package installation instructions.
 

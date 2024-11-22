@@ -13,28 +13,28 @@ pip install "coco-pack[shell]"
 
 ### Direct Commands (Default)
 
+Use the shell commands directly:
+
 ```bash
 # Use shell commands directly
 path-cleanup --remove-duplicates --apply
-color-wrap RED "This text will be red!"
-jekyll-restart 4000
+color-wrap CYAN "This text will be cyan!"
 ```
 
 ### Namespaced Commands
 
+Prepend `cocopack` `{subcommand}` to access the shell commands:
+
 ```bash
-# Use through cocopack namespace
 cocopack ezshell path_cleanup --remove-duplicates --apply
-cocopack prompt
-cocopack colorcode
 ```
 
 ## Uninstallation
 
 ```bash
-pip uninstall coco-pack
+pip uninstall cocopack
 ```
 
 After uninstallation:
 1. Remove cocopack-related lines from your .bashrc or .zshrc
-2. Clean up any remaining shell scripts: `rm -f ~/.local/bin/cocopack*`
+2. Clean up any remaining shell scripts (e.g.): `rm -f ~/.local/bin/cocopack*`
