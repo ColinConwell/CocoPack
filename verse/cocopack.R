@@ -114,7 +114,7 @@ run_bootstrap <- function(data_frame, group_vars, boot_fn, times=1000,
   return(result)
 }
 
-label_significance <- function(results, p_col='p', alpha=0.5, alpha_low=0.001) {
+label_significance <- function(results, p_col='p', alpha=0.05, alpha_low=0.001) {
     p_values = c(1e-5, 1e-4, 0.001, 0.01, 0.05) %>%
       keep(function(x) {x >= alpha_low & x <= alpha})
     

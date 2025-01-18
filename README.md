@@ -2,7 +2,7 @@
 
 Programmatic toolkits for Python, R, and shell scripting. Coco-Pack provides a unified collection of utilities to streamline your development workflow across multiple languages.
 
-*Caveat Emptor*: The core functionality of this codebase is (largely) human-built and human-tested. However, much of the documentation and supporting infrastructure (e.g. installation instructions) has been generated with the help of generative AI. Please use with caution and feel free to contribute to the project if you have any improvements or corrections.
+*Caveat Emptor*: The core functionality of this codebase is (largely) human-built and human-tested. However, much of the documentation and supporting infrastructure (e.g. installation instructions) has been generated with the help of generative AI. Please use with caution.
 
 Functionality Status:
 - [x] Python
