@@ -7,20 +7,41 @@ Programmatic toolkits for Python, R, and shell scripting. Coco-Pack provides a u
 Functionality Status:
 - [x] Python
 - [ ] Shell
-- [ ] R Package
+- [x] R Package
 
-(Shell commands through the CLI are currently out-of-order.)
+(Shell commands through the CLI are currently out-of-order, but still work when sourced directly.)
 
 ## Quick-Start
 
-### Full Installation (Python + Shell)
+### Python Package
+
+```bash
+pip install coco-pack
+```
+
+### R Package
+
+```R
+if (!require(pacman)) {install.packages("pacman")}
+pacman::p_load_gh("colinconwell/Coco-Pack-R")
+```
+
+### Shell Commands
+
+```bash
+pip install "coco-pack[shell]"
+```
+
+### Python + Shell
 
 Install everything (with direct shell commands):
+
 ```bash
 pip install "coco-pack[shell]"
 ```
 
 After installation, shell commands are available directly:
+
 ```bash
 # Use shell commands directly (default)
 path-cleanup --remove-duplicates --apply
@@ -63,7 +84,20 @@ This will remove both Python and shell components. You should also remove any re
 
 ### R Package (Coco-Pack-R)
 
-To source the R code from cocopack, you can run the following command:
+**Standalone Package**:
+
+The standalone version of the `coco-pack` R package is available at [Coco-Pack-R](https://colinconwell.github.io/Coco-Pack-R/).
+
+You can install this package by running the following command:
+
+```R
+if (!require(pacman)) {install.packages("pacman")}
+pacman::p_load_gh("colinconwell/Coco-Pack-R")
+```
+
+**Direct Source**:
+
+To directly source the R code from cocopack, you can run the following command:
 
 ```R
 if (!require(pacman)) {install.packages("pacman")}
