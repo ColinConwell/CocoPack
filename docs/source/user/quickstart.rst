@@ -24,38 +24,38 @@ One of the most useful features is the Jupyter notebook styling and magic comman
     # Enable auto-reload for development
     magics.set_autoreload('complete')
 
-PowerPoint and Keynote
-----------------------
+Presentations and Figures
+------------------------
 
 Convert presentations to images and PDFs:
 
 .. code-block:: python
 
-    from cocopack.keynote import keynote_to_images, crop_whitespace, convert_to_pdf
+    from cocopack.figure_ops import slides_to_images, convert_all_images_to_pdf
     
-    # Convert Keynote presentation to PNG images
-    keynote_to_images('presentation.key', 'output_folder')
-    
-    # Crop whitespace around images
-    crop_whitespace('output_folder')
+    # Automatically detect file type and convert to PNG images
+    slides_to_images('presentation.pptx', 'output_folder', 
+                     filename_format='figure{:02d}.png',
+                     crop_images=True, 
+                     margin_size='0.5cm')
     
     # Convert to high-quality PDFs
     convert_all_images_to_pdf('output_folder')
 
-For PowerPoint:
+For specific presentation types:
 
 .. code-block:: python
 
-    from cocopack.powerpoint import powerpoint_to_images, crop_whitespace, convert_to_pdf
+    from cocopack.figure_ops import keynote_to_images, powerpoint_to_images, crop_whitespace
     
-    # Convert PowerPoint presentation to PNG images
+    # For Keynote presentations
+    keynote_to_images('presentation.key', 'output_folder')
+    
+    # For PowerPoint presentations
     powerpoint_to_images('presentation.pptx', 'output_folder')
     
     # Crop whitespace around images
-    crop_whitespace('output_folder')
-    
-    # Convert to high-quality PDFs
-    convert_all_images_to_pdf('output_folder')
+    crop_whitespace('output_folder', margin_size='1cm')
 
 Shell
 =====

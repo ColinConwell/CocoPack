@@ -143,17 +143,36 @@ path_cleanup --remove-duplicates --remove-empties --apply
 
 ## Other Notes & Details
 
-### PowerPoint + Keynote Support
+### Presentation & Figure Support
 
-The Python package includes Keynote / PowerPoint to PNG / PDF conversion functionality, some of which is platform-specific.
+The Python package includes presentation to image/PDF conversion functionality via the `figure_ops` module:
 
-- Platform-specific PowerPoint details:
-  - Uses AppleScript for macOS
-  - Uses win32com for Windows
-  - Uses LibreOffice CLI for Linux/other platforms with python-pptx as fallback
+- Unified interface for both PowerPoint and Keynote presentations:
+  - Automatically detects file type (.key, .ppt, .pptx)
+  - Platform-specific implementations for optimal results
 
-Note: Keynote is available exclusively on MacOS. Windows users will need to install pywin32 separately if they want to use the Windows-specific COM automation:
+- Platform-specific exports:
+  - macOS: Uses AppleScript for both Keynote and PowerPoint
+  - Windows: Uses COM interface (via pywin32) for PowerPoint
+  - Linux/Other: Uses LibreOffice CLI with python-pptx as fallback
 
+- Image processing tools:
+  - Cropping whitespace around images
+  - Adding customizable margins
+  - Converting to high-quality PDFs
+
+Example usage:
+```python
+from cocopack.figure_ops import slides_to_images, convert_all_images_to_pdf
+
+# Convert any presentation to PNGs and crop whitespace
+slides_to_images('presentation.pptx', 'output_folder', crop_images=True)
+
+# Convert to PDFs
+convert_all_images_to_pdf('output_folder')
+```
+
+Note: Keynote is available exclusively on macOS. Windows users will need to install pywin32 separately if they want to use the Windows-specific COM automation:
 ```bash
 pip install pywin32
 ```

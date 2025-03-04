@@ -34,8 +34,9 @@ def set_overleaf_root(overleaf_root=None):
     else: # prompt user for root
         OVERLEAF_ROOT = input('Enter the Overleaf root directory: ')
     
-def _check_overleaf_root_oninit():
+def _check_overleaf_root():
     overleaf_root_found = False
+    overleaf_root_valid = False
 
     if 'OVERLEAF_ROOT' in globals():
         overleaf_root_found = True
@@ -43,7 +44,12 @@ def _check_overleaf_root_oninit():
     if 'OVERLEAF_ROOT' in os.environ:
         overleaf_root_found = True
 
-    return overleaf_root_found
+    overleaf_root_abspath = os.path.abspath(OVERLEAF_ROOT)
+
+    if os.path.exists(overleaf_root_abspath):
+        overleaf_root_valid = True
+
+    return overleaf_root_found and overleaf_root_valid
 
 def _check_bibtexparser_version():
     return bibtexparser.__version__.startswith('1')
@@ -51,9 +57,6 @@ def _check_bibtexparser_version():
 if not _check_bibtexparser_version():
     raise ImportError("bibtexparser1.x, To fix, try:",
                       "\npip install bibtexparser~=1.0")
-
-if not _check_overleaf_root_oninit():
-    set_overleaf_root() # set root directory
 
 # Core Functions ----------------------------------------------------------
 
@@ -65,8 +68,9 @@ def get_overleaf_root(overleaf_root=None):
         if 'OVERLEAF_ROOT' in os.environ:
             return os.environ.get('OVERLEAF_ROOT')
             
-        else: # raise error if root not in globals
-            raise ValueError('Overleaf root not specified.')
+        else: # prompt user for root
+            set_overleaf_root()
+            _check_overleaf_root()
     
     return overleaf_root
 

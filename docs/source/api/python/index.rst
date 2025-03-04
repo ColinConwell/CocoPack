@@ -9,8 +9,8 @@ This section provides detailed documentation for the Python APIs in Coco-Pack.
 .. toctree::
    :maxdepth: 2
    
-   keynote
-   powerpoint
+   figure_ops
+   convert
    notebook
    overleaf
    path_ops
@@ -19,18 +19,18 @@ This section provides detailed documentation for the Python APIs in Coco-Pack.
 Module Overview
 ==============
 
-``cocopack.keynote``
--------------------
+``cocopack.figure_ops``
+----------------------
 
-.. automodule:: python.cocopack.keynote
+.. automodule:: python.cocopack.figure_ops
    :members:
    :undoc-members:
    :show-inheritance:
 
-``cocopack.powerpoint``
-----------------------
+``cocopack.convert``
+------------------
 
-.. automodule:: python.cocopack.powerpoint
+.. automodule:: python.cocopack.convert
    :members:
    :undoc-members:
    :show-inheritance:
