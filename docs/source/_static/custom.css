@@ -1,0 +1,45 @@
+/* Custom styles for Coco-Pack documentation */
+
+/* Logo size */
+.navbar-brand img {
+    max-height: 60px;
+}
+
+/* Custom colors */
+:root {
+    --pst-color-primary: #3366cc;
+    --pst-color-secondary: #cc6633;
+    --pst-color-link: #3366cc;
+    --pst-color-link-hover: #cc6633;
+}
+
+/* Code blocks */
+div.highlight {
+    border-radius: 4px;
+}
+
+/* Admonitions */
+div.admonition {
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Improve contrast for dark mode */
+[data-theme="dark"] {
+    --pst-color-primary: #6699ff;
+    --pst-color-secondary: #ff9966;
+    --pst-color-link: #6699ff;
+    --pst-color-link-hover: #ff9966;
+}
+
+/* Better spacing for lists */
+ul, ol {
+    padding-left: 1.5em;
+    margin-bottom: 1em;
+}
+
+/* Section headings */
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+}
