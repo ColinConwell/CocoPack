@@ -111,7 +111,7 @@ See [verse/README.md](./verse/README.md) for R package installation instructions
 
 ## Common Workflows
 
-### Development Environment Setup
+### Dev Environment Setup
 
 1. Set up your shell environment:
 ```bash
@@ -139,4 +139,21 @@ magics.set_autoreload('complete')
 ```bash
 # Clean up PATH environment variable
 path_cleanup --remove-duplicates --remove-empties --apply
+```
+
+## Other Notes & Details
+
+### PowerPoint + Keynote Support
+
+The Python package includes Keynote / PowerPoint to PNG / PDF conversion functionality, some of which is platform-specific.
+
+- Platform-specific PowerPoint details:
+  - Uses AppleScript for macOS
+  - Uses win32com for Windows
+  - Uses LibreOffice CLI for Linux/other platforms with python-pptx as fallback
+
+Note: Keynote is available exclusively on MacOS. Windows users will need to install pywin32 separately if they want to use the Windows-specific COM automation:
+
+```bash
+pip install pywin32
 ```

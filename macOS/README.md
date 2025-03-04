@@ -30,7 +30,7 @@ A Finder integration script that enables easy file synchronization using rsync. 
 
 Note: For remote destinations, ensure your SSH config file (~/.ssh/config) is properly configured with your host entries.
 
-#### keynote_to_image.scpt
+#### keynote_to_png.scpt
 A Finder integration script that converts Keynote presentations to PNG images. This script:
 
 - Converts each slide in a Keynote presentation to a PNG image
