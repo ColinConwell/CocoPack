@@ -7,9 +7,11 @@ Programmatic toolkits for Python, R, and shell scripting. Coco-Pack provides a u
 Functionality Status:
 - [x] Python
 - [ ] Shell
-- [x] R Package
+- [x] R Pack
 
 (Shell commands through the CLI are currently out-of-order, but still work when sourced directly.)
+
+Documentation for the standalone [R](https://www.r-project.org/) package may be found at [colinconwell.github.io/Coco-Pack-R](https://colinconwell.github.io/Coco-Pack-R)
 
 ## Quick-Start
 
