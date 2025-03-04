@@ -8,6 +8,22 @@ from PIL import Image
 from tqdm.auto import tqdm
 from datetime import datetime
 
+__all__ = [
+    'set_overleaf_root',
+    'get_overleaf_root', 
+    'get_overleaf_path', 
+    'list_overleaf_projects',
+    'gather_submission', 
+    'find_tex_inputs', 
+    'find_all_inputs', 
+    'stitch_tex_files', 
+    'get_bibtex_dir', 
+    'get_bibtex_files', 
+    'clean_bibtex_file', 
+    'stitch_bibtex_files']
+
+from .convert import convert_image
+
 # Initial Setup -----------------------------------------------------------
 
 def set_overleaf_root(overleaf_root=None):
@@ -58,7 +74,7 @@ def get_overleaf_path(project_name, overleaf_root=None):
     overleaf_root = get_overleaf_root(overleaf_root)
     return os.path.join(overleaf_root, project_name)
 
-def get_overleaf_projects(overleaf_root=None, exclusions=[], sort_by_date=True, **kwargs):
+def list_overleaf_projects(overleaf_root=None, exclusions=[], sort_by_date=True, **kwargs):
     overleaf_root = get_overleaf_root(overleaf_root) # fetch root
     
     overleaf_paths = [(os.path.getmtime(path), path) for path
@@ -81,6 +97,10 @@ def get_overleaf_projects(overleaf_root=None, exclusions=[], sort_by_date=True, 
                 print(f'{project}: Last Modified {date}')
     
     return [project for date, project in project_list]
+
+# alias for list_overleaf_projects
+def get_overleaf_projects(overleaf_root=None, exclusions=[], sort_by_date=True, **kwargs):
+    return list_overleaf_projects(overleaf_root, exclusions, sort_by_date, **kwargs)
 
 # Gather Submission Materials ---------------------------------------------
 
@@ -436,7 +456,7 @@ def get_bibtex_files(project_path, bibtex_dir, other_dirs=[]):
         
     return bibtex_files # from primary + other directories
 
-def clean_bibtex(input_file_path, output_file_path=None):
+def clean_bibtex_file(input_file_path, output_file_path=None):
     with open(input_file_path, 'r', encoding='utf-8') as file:
         lines = file.readlines()
 
@@ -564,50 +584,3 @@ def stitch_bibtex_files(project_path, bibtex_files, output_file,
                     
                 if kwargs.get('verbose', False):
                     print(f"{action_report} {file_path}")
-                
-# Input / Image Conversion -----------------------------------------------------
-
-def _make_opaque(img_input, bg_color=(255, 255, 255)):
-    # if input is path, load it as image
-    if isinstance(img_input, str):
-        img = Image.open(img_input)
-        
-    else: # assume input is image
-        img = copy(img_input)
-    
-    # Check if the image has an alpha channel
-    if img.mode in ('RGBA', 'LA') or ('transparency' in img.info):
-        # Create a new image with a white background
-        background = Image.new(img.mode[:-1], img.size, bg_color)
-        # Paste the image on the background (masking with itself)
-        background.paste(img, img.split()[-1])
-        image = background  # ... using the alpha channel as mask
-    
-    # Convert image to RGB 
-    if img.mode != 'RGB':
-        img = img.convert('RGB')
-            
-    return img # image updated with nontrasparent background
-
-def convert_image(source_path, target_format, **kwargs):
-    # Ensure the target format does not start with a dot
-    if target_format.startswith('.'):
-        target_format = target_format[1:]
-    
-    # Load the image with PIL:
-    img = Image.open(source_path)
-    
-    if target_format in ['jpg', 'pdf']:
-        img = _make_opaque(img)
-    
-    # Define the new filename
-    base = os.path.splitext(source_path)[0]
-    target_path = f"{base}.{target_format.lower()}"
-    
-    # Convert and save the image
-    img.save(target_path, target_format.upper())
-    
-    if kwargs.pop('remove_original', True):
-        os.remove(source_path)
-
-    return target_path # return the new path

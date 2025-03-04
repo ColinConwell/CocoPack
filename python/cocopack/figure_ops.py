@@ -1,19 +1,25 @@
 import os, re
 import glob
 import subprocess
-import argparse
+import platform
 from copy import copy
 from PIL import Image, ImageChops
 
-def reformat_image_filenames(output_path, reformat_pattern):
-    image_files = glob.glob(os.path.join(output_path, '*.png'))
+# Core Functions ------------------------------------------------------------
+
+def slides_to_images(input_path, output_path, filename_format='figure{:01d}.png',
+                     crop_images=True, margin_size='1cm', dpi=300):
     
-    for image_file in image_files:
-        basename = os.path.basename(image_file)
-        slide_number = re.search(r'\d+', basename).group(0)
-        new_filename = reformat_pattern.format(int(slide_number))
-        new_filepath = os.path.join(output_path, new_filename)
-        os.rename(image_file, new_filepath)
+    input_ext = _check_slides_extension(input_path)
+
+    if input_ext in ['.ppt', '.pptx']:
+        powerpoint_to_images(input_path, output_path, filename_format)
+
+    if input_ext == '.key':
+        keynote_to_images(input_path, output_path, filename_format)
+
+    if crop_images:
+        crop_whitespace(output_path, margin_size=margin_size, dpi=dpi)
 
 def keynote_to_images(input_path, output_path, filename_format='figure{:01d}.png'):
     #source: https://iworkautomation.com/keynote/document-export.html
@@ -33,9 +39,107 @@ def keynote_to_images(input_path, output_path, filename_format='figure{:01d}.png
     '''
     
     subprocess.run(['osascript', '-e', applescript])
+
+    if filename_format:
+        reformat_image_filenames(output_path, filename_format)
+
+def powerpoint_to_images(input_path, output_path, filename_format='figure{:01d}.png'):
+    input_path = os.path.abspath(input_path)
+    output_path = os.path.abspath(output_path)
+    if not os.path.exists(output_path):
+        os.makedirs(output_path)
+    
+    if platform.system() == 'Darwin':  # macOS
+        applescript = f'''
+        tell application "Microsoft PowerPoint"
+            open "{input_path}"
+            set thePresentation to active presentation
+            
+            set slideCount to count of slides in thePresentation
+            repeat with i from 1 to slideCount
+                set current slide of thePresentation to slide i of thePresentation
+                set slideFile to "{output_path}/Slide" & i & ".png"
+                save thePresentation in slideFile as save as PNG
+            end repeat
+            
+            close thePresentation saving no
+        end tell
+        '''
+        subprocess.run(['osascript', '-e', applescript])
+    
+    elif platform.system() == 'Windows':
+        try:
+            import win32com.client
+            
+            # Initialize PowerPoint application
+            ppt = win32com.client.Dispatch("PowerPoint.Application")
+            ppt.Visible = True
+            
+            # Open the presentation
+            presentation = ppt.Presentations.Open(input_path)
+            
+            # Export slides as images
+            for i in range(1, presentation.Slides.Count + 1):
+                slide_path = os.path.join(output_path, f"Slide{i}.png")
+                presentation.Slides(i).Export(slide_path, "PNG")
+            
+            # Close presentation without saving changes
+            presentation.Close()
+            ppt.Quit()
+            
+        except ImportError:
+            print("Error: win32com is required for Windows. Install with 'pip install pywin32'")
+            return
+        except Exception as e:
+            print(f"Error exporting PowerPoint slides: {e}")
+            return
+    
+    else:
+        try:
+            from pptx import Presentation
+            
+            # This is a limited fallback as python-pptx doesn't directly support exporting slides as images
+            # For full functionality, consider using LibreOffice CLI in a subprocess
+            print("Using python-pptx for basic PowerPoint handling. For full slide export, use Windows or macOS.")
+            
+            # For Linux/other platforms, can use LibreOffice command line:
+            # subprocess.run(['soffice', '--headless', '--convert-to', 'png', '--outdir', output_path, input_path])
+            
+            # Example LibreOffice conversion (uncomment if LibreOffice is available)
+            libreoffice_cmd = ['soffice', '--headless', '--convert-to', 'png', '--outdir', output_path, input_path]
+            try:
+                subprocess.run(libreoffice_cmd, check=True)
+            except subprocess.CalledProcessError:
+                print("Warning: LibreOffice conversion failed. Limited functionality available.")
+                print("Install LibreOffice for better platform-independent conversion.")
+            
+        except ImportError:
+            print("Error: pptx package is required. Install with 'pip install python-pptx'")
+            return
     
     if filename_format:
         reformat_image_filenames(output_path, filename_format)
+
+# Helper Functions ------------------------------------------------------------
+
+def _check_slides_extension(input_path):
+    input_ext = os.path.splitext(input_path)[1]
+
+    if input_ext not in ['.key', '.ppt', '.pptx']:
+        raise ValueError(f"Unsupported file extension: {input_ext}",
+                         "Supported extensions: .key, .ppt, .pptx")
+    
+    return input_ext
+
+def reformat_image_filenames(output_path, reformat_pattern):
+    image_files = glob.glob(os.path.join(output_path, '*.png'))
+    
+    for image_file in image_files:
+        basename = os.path.basename(image_file)
+        slide_number = re.search(r'\d+', basename).group(0)
+        new_filename = reformat_pattern.format(int(slide_number))
+        new_filepath = os.path.join(output_path, new_filename)
+        os.rename(image_file, new_filepath)
 
 def crop_whitespace(image_path, output_path=None, margin_size='1cm', dpi=300):
 
@@ -126,26 +230,3 @@ def mogrify_images_to_pdf(input_path, **kwargs):
     if kwargs.get('pdf_only', False):
         for image_file in image_files:
             os.remove(image_file)
-        
-        
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Convert Keynote slides to images and optionally crop whitespace.')
-    parser.add_argument('-i', '--input_path', help='Path to the Keynote file.')
-    parser.add_argument('-o', '--output_path', default=None, help='Output path for the images. (default: same as input_path)')
-    parser.add_argument('-c', '--crop_images', default=True, type=bool, help='Whether to crop whitespace around images. (default: True)')
-    parser.add_argument('-m', '--margin_size', default=None, help='Margin size to add back after cropping. (default: None)')
-    parser.add_argument('--pdf', action='store_true', help='Convert images to high-quality PDFs (300 DPI)')
-    parser.add_argument('--pdf_only', action='store_true', help='Only save as PDFs (delete PNG files)')
-    
-    args = parser.parse_args()
-
-    if args.output_path is None:
-        args.output_path = os.path.splitext(args.input_path)[0]
-
-    keynote_to_images(args.input_path, args.output_path)
-
-    if args.crop_images:
-        crop_whitespace(args.output_path, margin_size=args.margin_size)
-
-    if args.pdf or args.pdf_only:
-        convert_all_images_to_pdf(args.output_path, dpi=300, pdf_only=args.pdf_only)
