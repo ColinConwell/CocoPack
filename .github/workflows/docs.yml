@@ -34,54 +34,28 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install hatch
-          hatch env create docs
-          # Install the package with docs extras
-          pip install -e "."
-          # Install doc dependencies explicitly
+          
+          # Install doc dependencies directly from pyproject.toml
           pip install sphinx>=7.0.0 pydata-sphinx-theme>=0.13.3 myst-parser>=1.0.0 sphinx-copybutton>=0.5.2 sphinx-design>=0.4.1 sphinxcontrib-napoleon>=0.7
-          # Debug info
-          pip list | grep -i sphinx
-          which sphinx-build
+          
+          # Install the package in development mode (with correct path)
+          pip install -e .
+          
+          # Verify installation
+          sphinx-build --version
           
       - name: Build documentation
         run: |
-          # Try both approaches
-          echo "Using hatch to build docs..."
-          hatch run docs:build
+          # Build docs directly with sphinx-build
+          sphinx-build -b html docs/source docs/build/html
           
-          # If that fails, try direct sphinx-build
-          if [ ! -d "docs/build/html" ]; then
-            echo "Using sphinx-build directly..."
-            sphinx-build -b html docs/source docs/build/html
-          fi
-          
-          # Debug: check if docs were built correctly
-          echo "Checking build directory..."
-          ls -la docs/build/
-          ls -la docs/build/html || echo "html directory not found"
-          
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-        
-      - name: Check build output and prepare upload
-        run: |
-          if [ -d "docs/build/html" ]; then
-            echo "Docs were built successfully in docs/build/html"
-            UPLOAD_PATH="docs/build/html"
-          elif [ -d "docs/build" ]; then
-            echo "Using docs/build as upload path"
-            UPLOAD_PATH="docs/build"
-          else
-            echo "::error::Documentation build failed, no output directory found"
-            exit 1
-          fi
-          echo "UPLOAD_PATH=$UPLOAD_PATH" >> $GITHUB_ENV
+          # Check if build succeeded
+          ls -la docs/build/html || echo "HTML build failed"
           
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ${{ env.UPLOAD_PATH }}
+          path: 'docs/build/html'
           
   deploy:
     environment:
