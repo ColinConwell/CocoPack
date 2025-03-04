@@ -11,16 +11,12 @@ This section provides detailed documentation for the Python APIs in Coco-Pack.
    
    figure_ops
    convert
-   notebook
-   overleaf
-   path_ops
-   pacman
 
 Module Overview
-==============
+===============
 
 ``cocopack.figure_ops``
-----------------------
+-----------------------
 
 .. automodule:: python.cocopack.figure_ops
    :members:
@@ -28,7 +24,7 @@ Module Overview
    :show-inheritance:
 
 ``cocopack.convert``
-------------------
+--------------------
 
 .. automodule:: python.cocopack.convert
    :members:
@@ -36,7 +32,7 @@ Module Overview
    :show-inheritance:
 
 ``cocopack.notebook``
--------------------
+---------------------
 
 .. automodule:: python.cocopack.notebook
    :members:
@@ -44,7 +40,7 @@ Module Overview
    :show-inheritance:
 
 ``cocopack.overleaf``
---------------------
+---------------------
 
 .. automodule:: python.cocopack.overleaf
    :members:
@@ -52,7 +48,7 @@ Module Overview
    :show-inheritance:
 
 ``cocopack.path_ops``
--------------------
+---------------------
 
 .. automodule:: python.cocopack.path_ops
    :members:
@@ -60,7 +56,7 @@ Module Overview
    :show-inheritance:
 
 ``cocopack.pacman``
------------------
+-------------------
 
 .. automodule:: python.cocopack.pacman
    :members:

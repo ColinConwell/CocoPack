@@ -7,12 +7,13 @@ Figure Operations API
 The ``figure_ops`` module provides functionality for converting PowerPoint and Keynote presentations to images and PDFs, with options for cropping and reformatting.
 
 Main Functions
-=============
+==============
 
 slides_to_images
----------------
+----------------
 
 .. autofunction:: python.cocopack.figure_ops.slides_to_images
+    :no-index:
 
 This is the primary function that detects file type (.key, .ppt, .pptx) and applies the appropriate conversion method.
 
@@ -30,12 +31,13 @@ Example:
 
 
 Presentation Conversion
-======================
+=======================
 
 keynote_to_images
----------------
+-----------------
 
 .. autofunction:: python.cocopack.figure_ops.keynote_to_images
+    :no-index:
 
 Example:
 
@@ -47,9 +49,10 @@ Example:
     keynote_to_images('presentation.key', 'output_folder')
 
 powerpoint_to_images
-------------------
+--------------------
 
 .. autofunction:: python.cocopack.figure_ops.powerpoint_to_images
+    :no-index:
 
 Example:
 
@@ -62,13 +65,14 @@ Example:
 
 
 Image Processing
-==============
+================
 
 crop_whitespace
--------------
+---------------
 
 .. autofunction:: python.cocopack.figure_ops.crop_whitespace
-
+    :no-index:
+    
 Example:
 
 .. code-block:: python
@@ -79,12 +83,13 @@ Example:
     crop_whitespace('output_folder', margin_size='1cm')
 
 PDF Conversion
-============
+==============
 
 convert_to_pdf
-------------
+--------------
 
 .. autofunction:: python.cocopack.figure_ops.convert_to_pdf
+    :no-index:
 
 Example:
 
@@ -96,9 +101,10 @@ Example:
     convert_to_pdf('image.png', dpi=300)
 
 convert_all_images_to_pdf
------------------------
+-------------------------
 
 .. autofunction:: python.cocopack.figure_ops.convert_all_images_to_pdf
+    :no-index:
 
 Example:
 
@@ -110,10 +116,10 @@ Example:
     convert_all_images_to_pdf('output_folder', dpi=300)
 
 Platform Support
-==============
+================
 
 The module provides platform-specific implementations:
 
-* **macOS**: Uses AppleScript to interact with Keynote and PowerPoint
+* **macOS**: Uses AppleScript to interact with Keynote and PowerPoint alike
 * **Windows**: Uses the COM interface (via pywin32) to control PowerPoint
 * **Linux/Other**: Uses LibreOffice command-line tools with python-pptx as a fallback

@@ -10,7 +10,7 @@ Python
 ======
 
 Jupyter Notebook Styling
------------------------
+------------------------
 
 One of the most useful features is the Jupyter notebook styling and magic commands:
 
@@ -25,7 +25,7 @@ One of the most useful features is the Jupyter notebook styling and magic comman
     magics.set_autoreload('complete')
 
 Presentations and Figures
-------------------------
+-------------------------
 
 Convert presentations to images and PDFs:
 
@@ -61,19 +61,19 @@ Shell
 =====
 
 Add to Your Shell Configuration
-------------------------------
+-------------------------------
 
 .. code-block:: bash
 
     # Add to .bashrc or .zshrc
-    eval "$(cocopack prompt)"  # Load prompt utilities
-    eval "$(cocopack ezshell)"  # Load shell utilities
+    eval "$(cocopack prompt)"  # Prompt utilities
+    eval "$(cocopack ezshell)"  # Shell utilities
     
     # Configure custom prompt
     PS1='$(conda_prompt green) %F{cyan}%n@%m%f $(custom_path) %# '
 
 Path Management
---------------
+---------------
 
 Clean up your PATH environment variable:
 
@@ -82,7 +82,7 @@ Clean up your PATH environment variable:
     path_cleanup --remove-duplicates --remove-empties --apply
 
 Colorize Output
---------------
+---------------
 
 Add color to your terminal output:
 
@@ -92,25 +92,14 @@ Add color to your terminal output:
     color-wrap BLUE "This text will be blue!"
 
 R Package
-========
+=========
 
 Load the Package
----------------
+----------------
 
 .. code-block:: R
-
-    library(cocopack)
     
-    # Or if installed directly from GitHub
     if (!require(pacman)) {install.packages("pacman")}
     pacman::p_load_gh("colinconwell/Coco-Pack-R")
 
-Use Common Functions
-------------------
-
-.. code-block:: R
-
-    # Example functions from the R package
-    glimpse_data(mtcars)
-    
-    # More examples to be added as the package develops
+More information as the package develops.

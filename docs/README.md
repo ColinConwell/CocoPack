@@ -26,6 +26,24 @@ make clean
 make serve
 ```
 
+### Quick Preview
+
+For convenience, we provide two scripts to quickly build, serve, and preview the documentation in your browser:
+
+```bash
+# Using the shell script
+./scripts/preview_docs.sh
+
+# Using the Python script
+./scripts/preview_docs.py
+```
+
+These scripts will:
+1. Build the documentation
+2. Start a local web server
+3. Open your browser to view the documentation
+4. Keep the server running until you press Ctrl+C
+
 After building, the documentation will be available in the `build/html` directory.
 
 ## Documentation Structure

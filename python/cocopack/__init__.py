@@ -1,10 +1,8 @@
-from . import notebook
-from os import environ
+__version__ = "0.1.0"
 
-from . import keynote
-from . import overleaf
-from . import pacman
-from . import path_ops
+from . import notebook
+
+from os import environ
 
 if not environ.get('ZERO_STYLE', False):
     notebook.stylizer.auto_style()

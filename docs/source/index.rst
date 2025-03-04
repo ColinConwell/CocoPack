@@ -4,7 +4,7 @@ Welcome to Coco-Pack's Documentation
 ====================================
 
 .. image:: ../../logo.png
-   :width: 150px
+   :width: 180px
    :align: right
    :alt: Coco-Pack Logo
 
@@ -12,21 +12,20 @@ Coco-Pack is a collection of programmatic toolkits for Python, R, and shell scri
 
 .. note::
 
-   This documentation is under active development.
+   *Caveat Emptor*: This package is under active development. All code has been tested by a human (me), but I've made ample use of a custom generative AI pipeline for (auto-)documentation. If the documentation appears inaccurate, please refer to the source code or file an issue to let me know.
 
 Features
 --------
 
 * **Python Utilities**: Tools for data processing, visualization, and automation
-* **Shell Scripts**: Command-line utilities for everyday tasks
-* **R Package**: Statistical and data manipulation tools
-* **Cross-language Interoperability**: Seamless workflow between languages
+* **Shell CLI**: Command-line tools for common tasks and workflows
+* **R Package**: Tools for statistics, data manipulation, and visualization
 
 Quick Start
 -----------
 
 Python Package
-^^^^^^^^^^^^^
+^^^^^^^^^^^^^^
 
 .. code-block:: bash
 
@@ -41,7 +40,7 @@ R Package
    pacman::p_load_gh("colinconwell/Coco-Pack-R")
 
 Shell Commands
-^^^^^^^^^^^^^
+^^^^^^^^^^^^^^
 
 .. code-block:: bash
 
@@ -54,11 +53,8 @@ Contents
    :maxdepth: 2
    :caption: User Guide
    
-   user/installation
    user/quickstart
-   user/shell_usage
-   user/python_usage
-   user/r_usage
+   user/installation
 
 .. toctree::
    :maxdepth: 2
@@ -75,8 +71,8 @@ Contents
    dev/contributing
    dev/release_notes
 
-Indices and tables
-=================
+Indices and Tables
+==================
 
 * :ref:`genindex`
 * :ref:`modindex`

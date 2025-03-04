@@ -20,8 +20,8 @@ To install just the Python utilities:
 
 This includes all the core Python functionality without any shell scripts.
 
-With Shell Scripts
------------------
+Optional Shell CLI
+------------------
 
 To install Python utilities along with shell script commands:
 

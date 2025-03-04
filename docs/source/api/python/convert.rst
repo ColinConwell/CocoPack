@@ -1,8 +1,8 @@
 .. _convert:
 
-=============
-Convert API
-=============
+==========
+Conversion
+==========
 
 The ``convert`` module provides general-purpose image format conversion utilities.
 
@@ -32,7 +32,7 @@ Helper Functions
 ==============
 
 _make_opaque
------------
+------------
 
 .. autofunction:: python.cocopack.convert._make_opaque
 
