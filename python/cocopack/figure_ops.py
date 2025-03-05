@@ -9,7 +9,16 @@ from PIL import Image, ImageChops
 
 def slides_to_images(input_path, output_path, filename_format='figure{:01d}.png',
                      crop_images=True, margin_size='1cm', dpi=300):
+    """Convert presentation slides to image files.
     
+    Args:
+        input_path (str): Path to the presentation file (.ppt, .pptx, or .key).
+        output_path (str): Directory path where the images will be saved.
+        filename_format (str, optional): Format string for the output filenames. Defaults to 'figure{:01d}.png'.
+        crop_images (bool, optional): Whether to crop whitespace around images. Defaults to True.
+        margin_size (str, optional): Margin size to add around cropped images. Defaults to '1cm'.
+        dpi (int, optional): DPI for the output images. Defaults to 300.
+    """
     input_ext = _check_slides_extension(input_path)
 
     if input_ext in ['.ppt', '.pptx']:
@@ -22,7 +31,17 @@ def slides_to_images(input_path, output_path, filename_format='figure{:01d}.png'
         crop_whitespace(output_path, margin_size=margin_size, dpi=dpi)
 
 def keynote_to_images(input_path, output_path, filename_format='figure{:01d}.png'):
-    #source: https://iworkautomation.com/keynote/document-export.html
+    """Convert Keynote slides to image files using AppleScript.
+    
+    Args:
+        input_path (str): Path to the Keynote file.
+        output_path (str): Directory path where the images will be saved.
+        filename_format (str, optional): Format string for the output filenames. Defaults to 'figure{:01d}.png'.
+    
+    Note:
+        This function only works on macOS systems with Keynote installed.
+        Source: https://iworkautomation.com/keynote/document-export.html
+    """
     input_path = os.path.abspath(input_path)
     output_path = os.path.abspath(output_path)
     if not os.path.exists(output_path):
@@ -44,6 +63,19 @@ def keynote_to_images(input_path, output_path, filename_format='figure{:01d}.png
         reformat_image_filenames(output_path, filename_format)
 
 def powerpoint_to_images(input_path, output_path, filename_format='figure{:01d}.png'):
+    """Convert PowerPoint slides to image files.
+    
+    Args:
+        input_path (str): Path to the PowerPoint file (.ppt or .pptx).
+        output_path (str): Directory path where the images will be saved.
+        filename_format (str, optional): Format string for the output filenames. Defaults to 'figure{:01d}.png'.
+    
+    Note:
+        This function uses different methods depending on the operating system:
+        - On macOS: Uses AppleScript with PowerPoint
+        - On Windows: Uses win32com.client
+        - On other platforms: Attempts to use LibreOffice or python-pptx
+    """
     input_path = os.path.abspath(input_path)
     output_path = os.path.abspath(output_path)
     if not os.path.exists(output_path):
@@ -132,6 +164,13 @@ def _check_slides_extension(input_path):
     return input_ext
 
 def reformat_image_filenames(output_path, reformat_pattern):
+    """Rename image files based on a specified pattern.
+    
+    Args:
+        output_path (str): Directory containing the image files.
+        reformat_pattern (str): Format string for the new filenames (e.g., 'figure{:01d}.png').
+            The format string should contain a placeholder for the slide number.
+    """
     image_files = glob.glob(os.path.join(output_path, '*.png'))
     
     for image_file in image_files:
@@ -142,7 +181,15 @@ def reformat_image_filenames(output_path, reformat_pattern):
         os.rename(image_file, new_filepath)
 
 def crop_whitespace(image_path, output_path=None, margin_size='1cm', dpi=300):
-
+    """Crop whitespace around images and add a specified margin.
+    
+    Args:
+        image_path (str): Path to an image file or a directory containing image files.
+        output_path (str, optional): Path where the cropped images will be saved. 
+            If None, overwrites the original files. Defaults to None.
+        margin_size (str, optional): Margin size to add around cropped images in cm. Defaults to '1cm'.
+        dpi (int, optional): DPI for the output images, used for margin calculation. Defaults to 300.
+    """
     def add_margin(image, margin_pixels):
         width, height = image.size
         new_width = width + 2 * margin_pixels
@@ -188,7 +235,19 @@ def crop_whitespace(image_path, output_path=None, margin_size='1cm', dpi=300):
         crop_single_image(image_path, output_path)
 
 def convert_to_pdf(image_path, output_path=None, dpi=300, **kwargs):
-    """Convert PNG images to high-quality PDF files."""
+    """Convert PNG images to high-quality PDF files.
+    
+    Args:
+        image_path (str): Path to an image file or a directory containing image files.
+        output_path (str, optional): Path where the PDF files will be saved.
+            If None, uses the same location as the input. Defaults to None.
+        dpi (int, optional): DPI for the output PDF files. Defaults to 300.
+        **kwargs: Additional keyword arguments.
+            pdf_only (bool): If True, removes the original image files. Defaults to False.
+    
+    Returns:
+        None
+    """
     if output_path is None:
         output_path = copy(image_path)
     
@@ -218,11 +277,29 @@ def convert_to_pdf(image_path, output_path=None, dpi=300, **kwargs):
         os.remove(image_path)
 
 def convert_all_images_to_pdf(input_path, dpi=300, **kwargs):
+    """Convert all PNG images in a directory and its subdirectories to PDF files.
+    
+    Args:
+        input_path (str): Path to the directory containing PNG images.
+        dpi (int, optional): DPI for the output PDF files. Defaults to 300.
+        **kwargs: Additional keyword arguments passed to convert_to_pdf.
+            pdf_only (bool): If True, removes the original image files. Defaults to False.
+    """
     image_files = glob.glob(os.path.join(input_path, '**/*.png'), recursive=True)
     for image_file in image_files:
         convert_to_pdf(image_file, None, dpi, **kwargs)
 
 def mogrify_images_to_pdf(input_path, **kwargs):
+    """Convert PNG images to PDF using ImageMagick's mogrify command.
+    
+    Args:
+        input_path (str): Path to the directory containing PNG images.
+        **kwargs: Additional keyword arguments.
+            pdf_only (bool): If True, removes the original image files. Defaults to False.
+            
+    Note:
+        This function requires ImageMagick to be installed on the system.
+    """
     image_files = glob.glob(os.path.join(input_path, '**/*.png'), recursive=True)
     for image_file in image_files:
         subprocess.run(['mogrify', '-format', 'pdf', '-quality', '100', '-density', '300', image_file])

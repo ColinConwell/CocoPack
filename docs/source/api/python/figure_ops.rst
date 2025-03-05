@@ -1,8 +1,8 @@
 .. _figure_ops:
 
-======================
-Figure Operations API
-======================
+=================
+Figure Operations
+=================
 
 The ``figure_ops`` module provides functionality for converting PowerPoint and Keynote presentations to images and PDFs, with options for cropping and reformatting.
 

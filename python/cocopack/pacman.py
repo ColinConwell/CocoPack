@@ -5,6 +5,13 @@ from itertools import chain
 from tqdm.auto import tqdm
 
 def delete_git_files(folder_path, dry_run=True):
+    """Delete all Git-related files and directories in a given folder.
+    
+    Args:
+        folder_path (str): Path to the folder to clean.
+        dry_run (bool, optional): If True, only print the files that would be deleted
+            without actually deleting them. Defaults to True.
+    """
     for root, dirs, files in os.walk(folder_path, topdown=False):
         for name in dirs + files:
             if name.startswith('.git'):
@@ -23,6 +30,13 @@ def delete_git_files(folder_path, dry_run=True):
                         os.remove(path_to_remove)
 
 def delete_ipynb_checkpoints(target_dir, dry_run=True):
+    """Delete all Jupyter Notebook checkpoint directories in a given folder.
+    
+    Args:
+        target_dir (str): Path to the directory to clean.
+        dry_run (bool, optional): If True, only print the directories that would be deleted
+            without actually deleting them. Defaults to True.
+    """
     for root, dirs, files in os.walk(target_dir):
         for dir in dirs:
             if dir == '.ipynb_checkpoints':
@@ -36,7 +50,11 @@ def delete_ipynb_checkpoints(target_dir, dry_run=True):
                     print(f"Deleted {checkpoint_folder}")
 
 def remove_kernel_metadata(notebook_path):
-
+    """Remove kernel specification metadata from a Jupyter notebook.
+    
+    Args:
+        notebook_path (str): Path to the Jupyter notebook file.
+    """
     # Load the notebook
     with open(notebook_path, 'r') as f:
         notebook = json.load(f)
@@ -50,7 +68,14 @@ def remove_kernel_metadata(notebook_path):
         json.dump(notebook, f, indent=4)
         
 def insert_colab_metadata(notebook_path):
+    """Insert Google Colab metadata into a Jupyter notebook.
     
+    This function adds metadata that configures the notebook to use GPU acceleration
+    with a T4 GPU type when opened in Google Colab.
+    
+    Args:
+        notebook_path (str): Path to the Jupyter notebook file.
+    """
     with open(notebook_path, 'r') as f:
         notebook = json.load(f)
         
@@ -71,9 +96,23 @@ def insert_colab_metadata(notebook_path):
         json.dump(notebook, f, indent=4)
 
 def clear_ipynb_checkpoints(project_dir, dry_run=True):
+    """Delete all Jupyter Notebook checkpoint directories in a project.
+    
+    Args:
+        project_dir (str): Path to the project directory to clean.
+        dry_run (bool, optional): If True, only print the directories that would be deleted
+            without actually deleting them. Defaults to True.
+    """
     delete_ipynb_checkpoints(project_dir, dry_run)
 
 def clean_project_notebooks(project_dir, dry_run=True):
+    """Clean Jupyter notebooks in a project by inserting Colab metadata.
+    
+    Args:
+        project_dir (str): Path to the project directory containing notebooks.
+        dry_run (bool, optional): If True, only print the notebooks that would be modified
+            without actually modifying them. Defaults to True.
+    """
     for notebook_path in glob(f'{project_dir}/**/*.ipynb', recursive=True):
         if dry_run: # names only
             print('Would clean:', notebook_path)
@@ -83,11 +122,38 @@ def clean_project_notebooks(project_dir, dry_run=True):
             #remove_kernel_metadata(notebook_path)
 
 def clear_git_files(project_dir, dry_run=True):
+    """Delete all Git-related files and directories in a project.
+    
+    Args:
+        project_dir (str): Path to the project directory to clean.
+        dry_run (bool, optional): If True, only print the files that would be deleted
+            without actually deleting them. Defaults to True.
+    """
     delete_git_files(project_dir, dry_run)
 
 def tar_files(source, filename, include=None, exclude=None, 
               hidden=False, fmt='bz2', dry_run=True):
+    """Create a tar archive of files from a source directory or list of files.
     
+    Args:
+        source (Union[str, list]): Either a directory path or a list of file paths to include.
+        filename (str): Base name for the output tar file (without extension).
+        include (list, optional): List of patterns to include in the archive. 
+            If provided, only files matching these patterns will be included. Defaults to None.
+        exclude (list, optional): List of patterns to exclude from the archive.
+            Files matching these patterns will be excluded. Defaults to None.
+        hidden (bool, optional): If True, include hidden files (starting with '.'). 
+            Defaults to False.
+        fmt (str, optional): Compression format to use ('bz2' or 'gz'). Defaults to 'bz2'.
+        dry_run (bool, optional): If True, only return the list of files that would be included
+            without creating the archive. Defaults to True.
+    
+    Returns:
+        list: If dry_run is True, returns the list of files that would be included.
+        
+    Raises:
+        ValueError: If an unsupported format is specified or if source is invalid.
+    """
     if include is None:
         include = []
     if exclude is None:
@@ -148,16 +214,30 @@ def tar_files(source, filename, include=None, exclude=None,
             tar.add(file_path)
 
 def get_file_size(file_path, unit_format='MB'):
+    """Get the size of a file in the specified unit format.
+    
+    Args:
+        file_path (str): Path to the file.
+        unit_format (str, optional): Unit to return the size in.
+            Options are 'B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'. 
+            Defaults to 'MB'.
+    
+    Returns:
+        float: Size of the file in the specified unit.
+        
+    Raises:
+        ValueError: If an unsupported unit format is specified.
+    """
     exponents = {'B': 0, 'KB': 1, 'MB': 2, 'GB': 3, 'TB': 4, 
                  'PB': 5, 'EB': 6, 'ZB': 7, 'YB': 8}
 
-    units = list(exponents.values())
+    units = list(exponents.keys())
 
     if unit_format and unit_format not in units:
         raise ValueError(f'unit_format must be one of {units}')
 
     size_in_bytes = os.path.getsize(file_path)
-    return size_in_bytes * (1024 ** exponents[unit_format])
+    return size_in_bytes / (1024 ** exponents[unit_format])
 
 def _get_extensions():
     extensions = {
@@ -188,7 +268,22 @@ def _get_extensions():
     
 def get_exclusions(*exclusion_specs, path_set=None, cache=True,
                    exclude_by_size=False, max_file_size='20MB'):
-
+    """Get a list of file patterns to exclude based on specified criteria.
+    
+    Args:
+        *exclusion_specs: Variable number of exclusion specifications.
+            These can be categories like 'image', 'video', 'audio', etc.
+        path_set (Union[str, list], optional): Either a directory path or a list of file paths
+            to check for exclusions by size. Defaults to None.
+        cache (bool, optional): If True, include '.cache' in exclusions. Defaults to True.
+        exclude_by_size (bool, optional): If True, exclude files larger than max_file_size.
+            Defaults to False.
+        max_file_size (str, optional): Maximum file size as a string with unit (e.g., '20MB').
+            Defaults to '20MB'.
+    
+    Returns:
+        list: List of file patterns and paths to exclude.
+    """
     extensions = _get_extensions()
     
     exclusions = []

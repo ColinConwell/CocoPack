@@ -27,6 +27,12 @@ from .convert import convert_image
 # Initial Setup -----------------------------------------------------------
 
 def set_overleaf_root(overleaf_root=None):
+    """Set the root directory for Overleaf projects.
+    
+    Args:
+        overleaf_root (str, optional): Path to the Overleaf root directory.
+            If None, prompts the user to enter the directory. Defaults to None.
+    """
     global OVERLEAF_ROOT
     if overleaf_root is not None:
         OVERLEAF_ROOT = overleaf_root
@@ -61,6 +67,16 @@ if not _check_bibtexparser_version():
 # Core Functions ----------------------------------------------------------
 
 def get_overleaf_root(overleaf_root=None):
+    """Get the root directory for Overleaf projects.
+    
+    Args:
+        overleaf_root (str, optional): Path to the Overleaf root directory.
+            If provided, returns this value. Defaults to None.
+    
+    Returns:
+        str: Path to the Overleaf root directory. If not provided, tries to get it from
+            globals, environment variables, or prompts the user.
+    """
     if overleaf_root is None: # fetch from globals
         if 'OVERLEAF_ROOT' in globals():
             return globals().get('OVERLEAF_ROOT')
@@ -75,10 +91,34 @@ def get_overleaf_root(overleaf_root=None):
     return overleaf_root
 
 def get_overleaf_path(project_name, overleaf_root=None):
+    """Get the full path to an Overleaf project.
+    
+    Args:
+        project_name (str): Name of the Overleaf project.
+        overleaf_root (str, optional): Path to the Overleaf root directory.
+            If None, gets it from get_overleaf_root(). Defaults to None.
+    
+    Returns:
+        str: Full path to the Overleaf project.
+    """
     overleaf_root = get_overleaf_root(overleaf_root)
     return os.path.join(overleaf_root, project_name)
 
 def list_overleaf_projects(overleaf_root=None, exclusions=[], sort_by_date=True, **kwargs):
+    """List all Overleaf projects in the root directory.
+    
+    Args:
+        overleaf_root (str, optional): Path to the Overleaf root directory.
+            If None, gets it from get_overleaf_root(). Defaults to None.
+        exclusions (list, optional): List of strings to filter out projects containing these substrings.
+            Defaults to an empty list.
+        sort_by_date (bool, optional): Whether to sort projects by modification date. Defaults to True.
+        **kwargs: Additional keyword arguments.
+            verbose (bool): If True, prints projects with their last modified dates. Defaults to False.
+    
+    Returns:
+        list: List of Overleaf project names.
+    """
     overleaf_root = get_overleaf_root(overleaf_root) # fetch root
     
     overleaf_paths = [(os.path.getmtime(path), path) for path
@@ -102,14 +142,43 @@ def list_overleaf_projects(overleaf_root=None, exclusions=[], sort_by_date=True,
     
     return [project for date, project in project_list]
 
-# alias for list_overleaf_projects
 def get_overleaf_projects(overleaf_root=None, exclusions=[], sort_by_date=True, **kwargs):
+    """Alias for list_overleaf_projects. Lists all Overleaf projects in the root directory.
+    
+    Args:
+        overleaf_root (str, optional): Path to the Overleaf root directory.
+            If None, gets it from get_overleaf_root(). Defaults to None.
+        exclusions (list, optional): List of strings to filter out projects containing these substrings.
+            Defaults to an empty list.
+        sort_by_date (bool, optional): Whether to sort projects by modification date. Defaults to True.
+        **kwargs: Additional keyword arguments.
+            verbose (bool): If True, prints projects with their last modified dates. Defaults to False.
+    
+    Returns:
+        list: List of Overleaf project names.
+    """
     return list_overleaf_projects(overleaf_root, exclusions, sort_by_date, **kwargs)
 
 # Gather Submission Materials ---------------------------------------------
 
 def gather_submission(project_path, main_file, support_files, output_dir, **kwargs):
+    """Gather LaTeX project files for submission, stitching files together and organizing references.
     
+    Args:
+        project_path (str): Path to the project root directory.
+        main_file (str): Name of the main LaTeX file.
+        support_files (list): List of supporting files to include (images, bibtex, etc.).
+        output_dir (str): Directory where gathered submission will be saved.
+        **kwargs: Additional keyword arguments.
+            prepend_project (bool): If True, prepend project_path to output_dir. Defaults to False.
+            fresh_start (bool): If True, clear the output directory if it exists. Defaults to True.
+            main_name (str): Name for the output main file. Defaults to 'manuscript.tex'.
+            new_names (dict): Map of original filenames to new filenames. Defaults to {}.
+            image_format (str): Convert images to this format if specified. Defaults to None.
+            verbose (bool): If True, print detailed information. Defaults to False.
+            stitch_bibtex (bool): If True, stitch bibtex files together. Defaults to True.
+            exclude_comments (bool): If True, exclude commented lines when updating references. Defaults to True.
+    """
     if kwargs.pop('prepend_project', False):
         output_dir = os.path.join(project_path, output_dir)
         
@@ -274,6 +343,19 @@ def search_for_input(file_path, content, **kwargs):
     return results # dictionary with match_context
 
 def find_tex_inputs(project_dir, main_file='main.tex', depth=0, **kwargs):
+    """Recursively find all LaTeX \input{} commands in a main file and its included files.
+    
+    Args:
+        project_dir (str): Path to the project directory.
+        main_file (str, optional): Name of the main LaTeX file. Defaults to 'main.tex'.
+        depth (int, optional): Current recursion depth. Defaults to 0.
+        **kwargs: Additional keyword arguments.
+            max_depth (int): Maximum recursion depth. Defaults to 5.
+            prepend_path (bool): If True, prepend the directory path to input files. Defaults to False.
+    
+    Returns:
+        dict: Nested dictionary representing the structure of the LaTeX files and their inputs.
+    """
     max_depth = kwargs.get('max_depth', 5)
     
     if depth > max_depth:
@@ -316,7 +398,24 @@ def find_tex_inputs(project_dir, main_file='main.tex', depth=0, **kwargs):
     return structure
 
 def find_all_inputs(project_path, main_file, stitch_first=False, **kwargs):
+    """Find all files referenced in a LaTeX document through various commands.
     
+    This function scans a LaTeX document for references to other files through commands like
+    \input, \includegraphics, \bibliography, etc.
+    
+    Args:
+        project_path (str): Path to the project directory.
+        main_file (str): Name of the main LaTeX file.
+        stitch_first (bool, optional): If True, stitch all input files before searching.
+            Defaults to False.
+        **kwargs: Additional keyword arguments.
+            exclusions (list): List of strings to exclude files containing these substrings.
+            files_only (bool): If True, return only file paths without match context. Defaults to False.
+    
+    Returns:
+        Union[dict, list]: Either a dictionary mapping file paths to their match context,
+            or a list of file paths if files_only=True.
+    """
     # List all non-hidden files recursively in the project path
     all_files = []
     for root, dirs, files in os.walk(project_path):
@@ -378,6 +477,22 @@ def update_paths(project_path, tex_file, updates, **kwargs):
     write_content(os.path.join(project_path, tex_file), content)
 
 def stitch_tex_files(project_dir, main_file='main.tex', output_file=None, **kwargs):
+    """Stitch together a LaTeX document by resolving all \input commands.
+    
+    Args:
+        project_dir (str): Path to the project directory.
+        main_file (str, optional): Name of the main LaTeX file. Defaults to 'main.tex'.
+        output_file (str, optional): Path where the stitched file will be saved.
+            If None, the function will only return the content. Defaults to None.
+        **kwargs: Additional keyword arguments.
+            exclude_with_comment (list): List of patterns to comment out instead of including.
+            exclude (list): List of patterns to exclude from stitching.
+            verbose (bool): If True, print detailed information. Defaults to False.
+            content_only (bool): If True, only return the content without writing to a file. Defaults to True.
+    
+    Returns:
+        str: The stitched LaTeX content.
+    """
     comment_exclude = kwargs.pop('exclude_with_comment', [])
     exclusions = kwargs.get('exclude', [])
     
@@ -435,12 +550,35 @@ def stitch_tex_files(project_dir, main_file='main.tex', output_file=None, **kwar
 # Manage Bibtex Files -----------------------------------------------------
 
 def get_bibtex_dir(project_name, bibtex_dir='citation', **kwargs):
+    """Get the path to the directory containing BibTeX files for a project.
+    
+    Args:
+        project_name (str): Name of the Overleaf project.
+        bibtex_dir (str, optional): Name of the directory containing BibTeX files. 
+            Defaults to 'citation'.
+        **kwargs: Additional keyword arguments.
+            overleaf_root (str): Path to the Overleaf root directory.
+    
+    Returns:
+        str: Path to the BibTeX directory.
+    """
     overleaf_root = kwargs.pop('overleaf_root', None)
     overleaf_root = get_overleaf_root(overleaf_root)
     
     return os.path.join(overleaf_root, project_name, bibtex_dir)
 
 def get_bibtex_files(project_path, bibtex_dir, other_dirs=[]):
+    """Get a list of BibTeX files in the specified directories.
+    
+    Args:
+        project_path (str): Path to the project root directory.
+        bibtex_dir (str): Name of the primary directory containing BibTeX files.
+        other_dirs (list, optional): List of additional directories to search for BibTeX files.
+            Defaults to an empty list.
+    
+    Returns:
+        list: List of relative paths to BibTeX files.
+    """
     # Process target bibtex directories + files:
     directories, bibtex_files = [bibtex_dir], []
     
@@ -461,6 +599,17 @@ def get_bibtex_files(project_path, bibtex_dir, other_dirs=[]):
     return bibtex_files # from primary + other directories
 
 def clean_bibtex_file(input_file_path, output_file_path=None):
+    """Remove commented lines from a BibTeX file.
+    
+    Args:
+        input_file_path (str): Path to the input BibTeX file.
+        output_file_path (str, optional): Path where the cleaned file will be saved.
+            If None, returns the cleaned content as a StringIO object. Defaults to None.
+    
+    Returns:
+        io.StringIO: StringIO object containing the cleaned content if output_file_path is None,
+            otherwise None.
+    """
     with open(input_file_path, 'r', encoding='utf-8') as file:
         lines = file.readlines()
 
@@ -477,6 +626,19 @@ def clean_bibtex_file(input_file_path, output_file_path=None):
         return io.StringIO(''.join(cleaned_content))
     
 def parse_bibtex_file(bibtex_content, backend='bibtexparser'):
+    """Parse BibTeX content using the specified backend.
+    
+    Args:
+        bibtex_content (Union[str, io.StringIO]): BibTeX content as a string or StringIO object.
+        backend (str, optional): Backend library to use for parsing.
+            Options are 'bibtexparser' or 'pybtex'. Defaults to 'bibtexparser'.
+    
+    Returns:
+        object: Parsed BibTeX database object (type depends on the backend used).
+    
+    Raises:
+        ValueError: If the specified backend is not supported.
+    """
     from pybtex.database import parse_string
     import bibtexparser # assumed version 1.X 
     
@@ -498,7 +660,24 @@ def parse_bibtex_file(bibtex_content, backend='bibtexparser'):
 
 def stitch_bibtex_files(project_path, bibtex_files, output_file,
                         cleanup=False, dry_run=True, **kwargs):
-
+    """Combine multiple BibTeX files into a single file, removing duplicates.
+    
+    Args:
+        project_path (str): Path to the project root directory.
+        bibtex_files (Union[str, list]): Either a directory containing BibTeX files
+            or a list of BibTeX file paths.
+        output_file (str): Path where the stitched file will be saved.
+        cleanup (bool, optional): If True, delete or backup the original files. Defaults to False.
+        dry_run (bool, optional): If True, don't write the stitched file or perform cleanup.
+            Defaults to True.
+        **kwargs: Additional keyword arguments.
+            prepend_project (bool): If True, prepend project_path to output_file. Defaults to True.
+            backup_dir (str): Directory where original files will be backed up, if cleanup is True.
+            verbose (bool): If True, print detailed information. Defaults to False.
+    
+    Returns:
+        None
+    """
     if kwargs.get('prepend_project', True):
         output_file = os.path.join(project_path, output_file)
 

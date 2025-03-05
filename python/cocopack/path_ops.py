@@ -1,12 +1,33 @@
 import os, sys
 
 def diffpath(path, root):
+    """Get the relative path between two paths.
+    
+    Args:
+        path (str): The target path.
+        root (str): The root path to compute the relative path from.
+    
+    Returns:
+        str: The relative path from root to path.
+    """
     # Convert both paths to absolute paths
     abs_path = os.path.abspath(path)
     abs_root = os.path.abspath(root)
     return os.path.relpath(abs_path, abs_root)
 
 def print_path_structure(root_dir, max_depth=2, include=None, exclude=None, **kwargs):
+    """Print a hierarchical representation of a directory structure.
+    
+    Args:
+        root_dir (str): Path to the root directory to display.
+        max_depth (int, optional): Maximum depth of directories to display. Defaults to 2.
+        include (Union[str, list], optional): Pattern(s) to include in the output.
+            Only entries containing these patterns will be shown. Defaults to None.
+        exclude (Union[str, list], optional): Pattern(s) to exclude from the output.
+            Entries containing these patterns will be excluded. Defaults to None.
+        **kwargs: Additional keyword arguments.
+            whitespace (int): Number of spaces to add before each line. Defaults to 0.
+    """
     root_dir_depth = root_dir.rstrip(os.sep).count(os.sep)  # Base depth of root directory
 
     def check_pattern(entry, patterns, exclude=False):
@@ -55,7 +76,23 @@ def print_path_structure(root_dir, max_depth=2, include=None, exclude=None, **kw
 
 def list_packages(pkg_names=[], dir_paths=None, pkg_types=['site-packages'], 
                   file_types=['.py'], other_filters=[], **kwargs):
+    """List and display package structures from Python's import paths.
     
+    Args:
+        pkg_names (Union[str, list], optional): Name(s) of packages to list.
+            If empty, all packages in found directories will be listed. Defaults to [].
+        dir_paths (Union[str, list], optional): Directory paths to search for packages.
+            If None, uses sys.path. Defaults to None.
+        pkg_types (Union[str, list], optional): Types of package directories to look for.
+            Defaults to ['site-packages'].
+        file_types (Union[str, list], optional): File extensions to include in the output.
+            Defaults to ['.py'].
+        other_filters (Union[str, list], optional): Additional patterns to filter by.
+            Defaults to [].
+        **kwargs: Additional keyword arguments.
+            global_root (str): Common root path for relative path display.
+            max_depth (int): Maximum depth for print_path_structure. Defaults to 2.
+    """
     if dir_paths is None or len(dir_paths) == 0: 
         dir_paths = sys.path # default to sys.path
         
