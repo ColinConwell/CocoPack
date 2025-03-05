@@ -12,7 +12,7 @@ Coco-Pack is a collection of programmatic toolkits for Python, R, and shell scri
 
 .. note::
 
-   *Caveat Emptor*: This package is under active development. All code has been tested by a human (me), but I've made ample use of a custom generative AI pipeline for (auto-)documentation. If the documentation appears inaccurate, please refer to the source code or file an issue to let me know.
+   *Caveat Emptor*: All code in this package has been tested by a human (me), but I've made ample use of a custom generative AI pipeline for (auto-)documentation.
 
 Features
 --------

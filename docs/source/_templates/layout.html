@@ -1,0 +1,12 @@
+{% extends "!layout.html" %}
+
+{# Override the default title to use our custom title for all pages #}
+{% block htmltitle %}
+<title>Coco-Pack Docs {{ version }}</title>
+{% endblock %}
+
+{# Add jQuery from CDN before other scripts #}
+{% block extrahead %}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    {{ super() }}
+{% endblock %}

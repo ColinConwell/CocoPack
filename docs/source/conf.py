@@ -3,6 +3,8 @@ import sys
 
 # Add the project root directory to the Python path
 sys.path.insert(0, os.path.abspath('../..'))
+# Add the python directory for direct python imports
+sys.path.insert(0, os.path.abspath('../../python'))
 from python.cocopack import __version__
 
 # -- Project information -----------------------------------------------------
@@ -61,26 +63,33 @@ html_theme = 'pydata_sphinx_theme'
 html_logo = '../../logo.png'
 html_static_path = ['_static']
 html_css_files = ['custom.css']
+html_js_files = ['custom.js']
+# Using custom layout.html template to override title for all pages
+
+html_sidebars = {"**": []}
 
 # PyData theme options
 html_theme_options = {
     "logo": {
+        "text": "Coco-Pack",
         "image_light": "../../logo.png",
         "image_dark": "../../logo.png",
+        "alt_text": "Coco-Pack",
     },
     "github_url": "https://github.com/ColinConwell/Coco-Pack",
     "use_edit_page_button": True,
-    "show_toc_level": 2,
     "navigation_with_keys": True,
     "announcement": "This documentation is under active development.",
+    "show_toc_level": 2,
     "icon_links": [
         {
             "name": "Documentation Source",
             "url": "https://github.com/ColinConwell/Coco-Pack/tree/main/docs/source",
-            "icon": "fab fa-book",
+            "icon": "fa-book",
         },
     ],
     "navbar_end": ["theme-switcher", "navbar-icon-links"],
+    "search_bar_position": "none",  # Disable the search bar
     "footer_items": ["copyright", "last-updated"],
     "secondary_sidebar_items": ["page-toc", "edit-this-page"],
     "pygment_light_style": "tango",

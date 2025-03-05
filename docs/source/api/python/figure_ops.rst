@@ -12,7 +12,7 @@ Main Functions
 slides_to_images
 ----------------
 
-.. autofunction:: python.cocopack.figure_ops.slides_to_images
+.. autofunction:: cocopack.figure_ops.slides_to_images
     :no-index:
 
 This is the primary function that detects file type (.key, .ppt, .pptx) and applies the appropriate conversion method.
@@ -36,7 +36,7 @@ Presentation Conversion
 keynote_to_images
 -----------------
 
-.. autofunction:: python.cocopack.figure_ops.keynote_to_images
+.. autofunction:: cocopack.figure_ops.keynote_to_images
     :no-index:
 
 Example:
@@ -51,7 +51,7 @@ Example:
 powerpoint_to_images
 --------------------
 
-.. autofunction:: python.cocopack.figure_ops.powerpoint_to_images
+.. autofunction:: cocopack.figure_ops.powerpoint_to_images
     :no-index:
 
 Example:
@@ -70,7 +70,7 @@ Image Processing
 crop_whitespace
 ---------------
 
-.. autofunction:: python.cocopack.figure_ops.crop_whitespace
+.. autofunction:: cocopack.figure_ops.crop_whitespace
     :no-index:
     
 Example:
@@ -88,7 +88,7 @@ PDF Conversion
 convert_to_pdf
 --------------
 
-.. autofunction:: python.cocopack.figure_ops.convert_to_pdf
+.. autofunction:: cocopack.figure_ops.convert_to_pdf
     :no-index:
 
 Example:
@@ -103,7 +103,7 @@ Example:
 convert_all_images_to_pdf
 -------------------------
 
-.. autofunction:: python.cocopack.figure_ops.convert_all_images_to_pdf
+.. autofunction:: cocopack.figure_ops.convert_all_images_to_pdf
     :no-index:
 
 Example:

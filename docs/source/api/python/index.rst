@@ -10,7 +10,6 @@ This section provides detailed documentation for the Python APIs in Coco-Pack.
    :maxdepth: 2
    
    figure_ops
-   convert
 
 Module Overview
 ===============
@@ -18,7 +17,7 @@ Module Overview
 ``cocopack.figure_ops``
 -----------------------
 
-.. automodule:: python.cocopack.figure_ops
+.. automodule:: cocopack.figure_ops
    :members:
    :undoc-members:
    :show-inheritance:
@@ -26,7 +25,7 @@ Module Overview
 ``cocopack.convert``
 --------------------
 
-.. automodule:: python.cocopack.convert
+.. automodule:: cocopack.convert
    :members:
    :undoc-members:
    :show-inheritance:
@@ -34,7 +33,7 @@ Module Overview
 ``cocopack.notebook``
 ---------------------
 
-.. automodule:: python.cocopack.notebook
+.. automodule:: cocopack.notebook
    :members:
    :undoc-members:
    :show-inheritance:
@@ -42,7 +41,7 @@ Module Overview
 ``cocopack.overleaf``
 ---------------------
 
-.. automodule:: python.cocopack.overleaf
+.. automodule:: cocopack.overleaf
    :members:
    :undoc-members:
    :show-inheritance:
@@ -50,7 +49,7 @@ Module Overview
 ``cocopack.path_ops``
 ---------------------
 
-.. automodule:: python.cocopack.path_ops
+.. automodule:: cocopack.path_ops
    :members:
    :undoc-members:
    :show-inheritance:
@@ -58,7 +57,7 @@ Module Overview
 ``cocopack.pacman``
 -------------------
 
-.. automodule:: python.cocopack.pacman
+.. automodule:: cocopack.pacman
    :members:
    :undoc-members:
    :show-inheritance:
