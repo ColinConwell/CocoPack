@@ -28,13 +28,13 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        # Install the package with docs dependencies
-        pip install -e ".[docs]"
+        pip install sphinx pydata-sphinx-theme myst-parser sphinx-copybutton sphinx-design sphinxcontrib-napoleon
+        pip install -e .
         
     - name: Build documentation
       run: |
-        # Build docs directly with sphinx-build
-        sphinx-build -b html docs/source docs/build/html
+        mkdir -p docs/build/html
+        python -m sphinx -b html docs/source docs/build/html
         
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
