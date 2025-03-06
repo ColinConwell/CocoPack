@@ -55,6 +55,24 @@ colorcode.sh
 
 Functions for adding color to terminal output.
 
+**Key Functions:**
+
+* ``color_wrap`` - Wrap text with color codes for terminal output
+* ``prompt_color`` - Convert regular color codes to prompt-compatible format (for use in PS1/prompt customization)
+
+Example usage of ``prompt_color`` in a custom bash prompt:
+
+.. code-block:: bash
+
+    # In your .bashrc or .zshrc
+    source /path/to/cocopack/colorcode.sh
+    
+    # For bash PS1 customization
+    PS1="$(prompt_color GREEN)\u@\h$(prompt_color RESET):$(prompt_color BLUE)\w$(prompt_color RESET)\\$ "
+    
+    # For zsh prompt customization
+    PROMPT='$(prompt_color GREEN)%n@%m$(prompt_color RESET):$(prompt_color BLUE)%~$(prompt_color RESET)%# '
+
 ezshell.sh
 ---------
 

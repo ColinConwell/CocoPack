@@ -4,7 +4,17 @@ from .cli import get_script_path
 def run_shell_function(script_name, function_name, *args):
     """Run a shell function from a script"""
     script_path = get_script_path(script_name)
-    cmd = f"source {script_path} && {function_name} {' '.join(args)}"
+    
+    if not script_path.exists():
+        print(f"Error: Script not found: {script_path}")
+        return 1
+    
+    # For color_wrap, we need to handle the arguments differently
+    if function_name == 'color_wrap':
+        cmd = f"bash -c 'source {script_path} && {function_name} {args[0]} {args[1]}'"
+    else:
+        cmd = f"source {script_path} && {function_name} {' '.join(args)}"
+    
     return os.system(cmd)
 
 ### from shell/ezshell.sh
@@ -45,7 +55,15 @@ def print_python_versions():
 
 def color_wrap():
     """Direct command for color_wrap"""
-    return run_shell_function('colorcode.sh', 'color_wrap', *sys.argv[1:])
+    if len(sys.argv) < 3:
+        print("Usage: color-wrap COLOR TEXT")
+        print("  COLOR: color name (e.g., RED, BOLD_BLUE)")
+        print("  TEXT: the text to colorize")
+        return 1
+    
+    color = sys.argv[1]
+    text = ' '.join(sys.argv[2:])
+    return run_shell_function('colorcode.sh', 'color_wrap', color, f'"{text}"')
 
 ### from shell/helpers/jekyll.sh
 

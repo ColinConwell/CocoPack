@@ -55,6 +55,7 @@ Contents
    
    user/quickstart
    user/installation
+   user/cli
 
 .. toctree::
    :maxdepth: 2

@@ -7,10 +7,10 @@ Installation
 Coco-Pack can be installed in various configurations depending on which components you need.
 
 Python Package
-=============
+==============
 
 Basic Installation
------------------
+------------------
 
 To install just the Python utilities:
 
@@ -29,6 +29,12 @@ To install Python utilities along with shell script commands:
 
     pip install "cocopack[shell]"
 
+This **Full Installation** provides three ways to access functionality:
+
+- The cocopack namespace command (e.g., ``cocopack colorcode RED "text"``)
+- Direct shell script wrappers (e.g., ``cocopack-colorcode RED "text"``)
+- Direct Python function wrappers (e.g., ``color-wrap RED "text"``)
+
 After installation, shell commands are available directly:
 
 .. code-block:: bash
@@ -42,7 +48,7 @@ After installation, shell commands are available directly:
     cocopack colorcode
 
 Namespaced Installation
-----------------------
+-----------------------
 
 If you prefer to keep all commands under the cocopack namespace:
 
@@ -50,7 +56,7 @@ If you prefer to keep all commands under the cocopack namespace:
 
     pip install "cocopack[namespaced]"
 
-This will only install the ``cocopack`` command:
+This **Namespace-Only Installation** only provides the ``cocopack`` namespace command:
 
 .. code-block:: bash
 
@@ -59,7 +65,7 @@ This will only install the ``cocopack`` command:
     cocopack colorcode
 
 Development Installation
------------------------
+------------------------
 
 For development, install with additional tools:
 
@@ -70,20 +76,20 @@ For development, install with additional tools:
 This includes testing and linting tools like pytest, black, and isort.
 
 R Package
-========
+=========
 
 Standalone Package
------------------
+------------------
 
 The R package is available from GitHub:
 
 .. code-block:: R
 
     if (!require(pacman)) {install.packages("pacman")}
-    pacman::p_load_gh("colinconwell/Coco-Pack-R")
+    pacman::p_load_gh("colinconwell/CocoPack-R")
 
 Direct Source
-------------
+-------------
 
 To directly source the R code:
 
@@ -96,7 +102,7 @@ To directly source the R code:
     remotes::source_url(glue('{repo_url}/verse/cocopack.R'))
 
 Uninstallation
-=============
+==============
 
 To remove everything:
 

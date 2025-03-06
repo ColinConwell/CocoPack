@@ -39,9 +39,17 @@ dev = [
 
 [project.scripts]
 cocopack = "cocopack.shellpack.cli:main"
+cocopack-install = "cocopack.shellpack.install:install_shell_scripts"
 
-# Direct shell commands (testing)
+# Direct shell commands
 color-wrap = "cocopack.shellpack.commands:color_wrap"
+show-symlinks = "cocopack.shellpack.commands:show_symlinks"
+show-storage = "cocopack.shellpack.commands:show_storage"
+safe-remove = "cocopack.shellpack.commands:safe_remove"
+recursive-cd = "cocopack.shellpack.commands:rcd"
+move-with-symlink = "cocopack.shellpack.commands:move_with_symlink"
+split-path = "cocopack.shellpack.commands:split_path"
+path-cleanup = "cocopack.shellpack.commands:path_cleanup"
 
 [project.urls]
 Homepage = "https://github.com/ColinConwell/Coco-Pack"

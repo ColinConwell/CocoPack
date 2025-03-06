@@ -1,17 +1,15 @@
-# Coco-Pack <img src="logo.png" align="right" width="224px" height="224px" />
+# CocoPack <img src="logo.png" align="right" width="224px" height="224px" />
 
-Programmatic toolkits for Python, R, and shell scripting. Coco-Pack provides a unified collection of utilities to streamline your development workflow across multiple languages.
+Programmatic toolkits for Python, R, and shell scripting. *CocoPack* (inspired by R's [`Hmisc` package](https://cran.r-project.org/web/packages/Hmisc/index.html)) provides a somewhat random collection of utilities to streamline development workflows that I (a *co*mputational *co*gnitive scientist) tend to use in many of my projects.
 
-*Caveat Emptor*: The core functionality of this codebase is (largely) human-built and human-tested. However, much of the documentation and supporting infrastructure (e.g. installation instructions) has been generated with the help of generative AI. Please use with caution.
+*Caveat Emptor*: The core functionality of this codebase is (largely) human-built and (entirely) human-tested. However, much of the documentation and supporting infrastructure (e.g. installation instructions) has been generated with ample help from [Claude AI](https://www.anthropic.com/). Please use with caution.
 
 Functionality Status:
 - [x] Python
-- [ ] Shell
+- [x] Shell
 - [x] R Pack
 
-(Shell commands through the CLI are currently out-of-order, but still work when sourced directly.)
-
-Documentation for the standalone [R](https://www.r-project.org/) package may be found at [colinconwell.github.io/Coco-Pack-R](https://colinconwell.github.io/Coco-Pack-R)
+Documentation for the standalone [R](https://www.r-project.org/) package may be found at [colinconwell.github.io/Coco-Pack-R](https://colinconwell.github.io/CocoPack-R)
 
 ## Quick-Start
 
@@ -32,6 +30,12 @@ pacman::p_load_gh("colinconwell/Coco-Pack-R")
 
 ```bash
 pip install "cocopack[shell]"
+```
+
+Shell scripts are installed automatically, but if needed, you can reinstall the shell script wrapperes with:
+
+```bash
+cocopack-install
 ```
 
 ### Python + Shell
@@ -84,17 +88,17 @@ pip uninstall cocopack
 
 This will remove both Python and shell components. You should also remove any references to cocopack commands from your .bashrc or .zshrc.
 
-### R Package (Coco-Pack-R)
+### R Package (CocoPack-R)
 
 **Standalone Package**:
 
-The standalone version of the `cocopack` R package is available at [Coco-Pack-R](https://colinconwell.github.io/Coco-Pack-R/).
+The standalone version of the `cocopack` R package is available at [CocoPack-R](https://colinconwell.github.io/CocoPack-R/).
 
 You can install this package by running the following command:
 
 ```R
 if (!require(pacman)) {install.packages("pacman")}
-pacman::p_load_gh("colinconwell/Coco-Pack-R")
+pacman::p_load_gh("colinconwell/CocoPack-R")
 ```
 
 **Direct Source**:
@@ -144,6 +148,18 @@ path_cleanup --remove-duplicates --remove-empties --apply
 ```
 
 ## Other Notes & Details
+
+<details>
+<summary><strong>Installation Options Explained</strong></summary>
+
+1. **Full Installation** (`pip install "cocopack[shell]"`):
+   - Users get the cocopack namespace command (e.g., `cocopack colorcode RED "text"`)
+   - Users get the direct shell script wrappers (e.g., `cocopack-colorcode RED "text"`)
+   - Users get the direct Python function wrappers (e.g., `color-wrap RED "text"`)
+
+2. **Namespace-Only Installation** (`pip install "cocopack[namespaced]"`):
+   - Users only get the cocopack namespace command (e.g., `cocopack colorcode RED "text"`)
+</details>
 
 ### Presentation & Figure Support
 
