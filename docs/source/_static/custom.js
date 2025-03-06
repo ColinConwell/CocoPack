@@ -1,6 +1,6 @@
 // Custom JavaScript for Coco-Pack documentation
 
-const hideEmptySearchContainers = false
+const hideEmptySearchContainers = false;
 
 // Function to hide empty search containers
 function hideEmptySearchContainers() {
