@@ -18,7 +18,7 @@ Documentation for the standalone [R](https://www.r-project.org/) package may be 
 ### Python Package
 
 ```bash
-pip install coco-pack
+pip install cocopack
 ```
 
 ### R Package
@@ -31,7 +31,7 @@ pacman::p_load_gh("colinconwell/Coco-Pack-R")
 ### Shell Commands
 
 ```bash
-pip install "coco-pack[shell]"
+pip install "cocopack[shell]"
 ```
 
 ### Python + Shell
@@ -39,7 +39,7 @@ pip install "coco-pack[shell]"
 Install everything (with direct shell commands):
 
 ```bash
-pip install "coco-pack[shell]"
+pip install "cocopack[shell]"
 ```
 
 After installation, shell commands are available directly:
@@ -58,7 +58,7 @@ cocopack colorcode
 
 If you prefer to keep all commands under the cocopack namespace:
 ```bash
-pip install "coco-pack[namespaced]"
+pip install "cocopack[namespaced]"
 ```
 
 This will only install the `cocopack` command:
@@ -72,14 +72,14 @@ cocopack colorcode
 
 Install just the Python utilities:
 ```bash
-pip install coco-pack
+pip install cocopack
 ```
 
 ### Uninstallation
 
 Remove everything:
 ```bash
-pip uninstall coco-pack
+pip uninstall cocopack
 ```
 
 This will remove both Python and shell components. You should also remove any references to cocopack commands from your .bashrc or .zshrc.
@@ -88,7 +88,7 @@ This will remove both Python and shell components. You should also remove any re
 
 **Standalone Package**:
 
-The standalone version of the `coco-pack` R package is available at [Coco-Pack-R](https://colinconwell.github.io/Coco-Pack-R/).
+The standalone version of the `cocopack` R package is available at [Coco-Pack-R](https://colinconwell.github.io/Coco-Pack-R/).
 
 You can install this package by running the following command:
 

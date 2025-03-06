@@ -4,7 +4,7 @@
 Quickstart
 ==========
 
-This guide will help you get up and running with a few of Coco-Pack's main features.
+This guide will help you get up and running with a few of CocoPack's main features.
 
 Python
 ======

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Initialize Coco-Pack by sourcing the scripts in the parent directory of this file
+# Initialize CocoPack by sourcing the scripts in the parent directory of this file
 source "$(dirname "$0")/ezshell.sh"
 source "$(dirname "$0")/prompt.sh"
 source "$(dirname "$0")/colorcode.sh"

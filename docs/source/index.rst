@@ -1,14 +1,14 @@
 .. _index:
 
-Welcome to Coco-Pack's Documentation
-====================================
+Welcome to CocoPack's Documentation
+===================================
 
 .. image:: ../../logo.png
    :width: 180px
    :align: right
-   :alt: Coco-Pack Logo
+   :alt: CocoPack Logo
 
-Coco-Pack is a collection of programmatic toolkits for Python, R, and shell scripting. It provides a unified set of utilities to streamline your development workflow across multiple languages.
+CocoPack is a collection of programmatic toolkits for Python, R, and shell scripting. It provides a unified set of utilities to streamline your development workflow across multiple languages.
 
 .. note::
 
@@ -29,7 +29,7 @@ Python Package
 
 .. code-block:: bash
 
-   pip install coco-pack
+   pip install cocopack
 
 R Package
 ^^^^^^^^^
@@ -44,7 +44,7 @@ Shell Commands
 
 .. code-block:: bash
 
-   pip install "coco-pack[shell]"
+   pip install "cocopack[shell]"
 
 Contents
 --------

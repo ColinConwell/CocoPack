@@ -8,7 +8,7 @@ sys.path.insert(0, os.path.abspath('../../python'))
 from python.cocopack import __version__
 
 # -- Project information -----------------------------------------------------
-project = 'Coco-Pack'
+project = 'CocoPack'
 copyright = '2025, Colin Conwell'
 author = 'Colin Conwell'
 version = __version__
@@ -71,10 +71,10 @@ html_sidebars = {"**": []}
 # PyData theme options
 html_theme_options = {
     "logo": {
-        "text": "Coco-Pack",
+        "text": "CocoPack",
         "image_light": "../../logo.png",
         "image_dark": "../../logo.png",
-        "alt_text": "Coco-Pack",
+        "alt_text": "CocoPack",
     },
     "github_url": "https://github.com/ColinConwell/Coco-Pack",
     "use_edit_page_button": True,
