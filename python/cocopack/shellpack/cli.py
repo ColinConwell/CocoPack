@@ -1,11 +1,13 @@
 import os, sys, subprocess
 from pathlib import Path
-
 from warnings import warn
+
+from .install import uninstall_shell_scripts
 
 SHELL_COMMANDS = {
     'ezshell': 'ezshell.sh',
     'colorcode': 'colorcode.sh',
+    'prompt': 'prompt.sh',
 }
 
 def get_script_path(script_name):
@@ -44,6 +46,8 @@ def print_usage():
     print("\nAvailable commands:")
     for cmd in SHELL_COMMANDS:
         print(f"  {cmd}")
+    print("\nSpecial commands:")
+    print("  uninstall-scripts - Remove shell script wrappers from bin directory")
     print("\nFor command-specific help:")
     print("  cocopack <command> --help")
 
@@ -86,6 +90,14 @@ def main():
         sys.exit(0)
 
     command = sys.argv[1]
+    
+    # Handle special commands
+    if command == 'uninstall-scripts':
+        print("Uninstalling shell script wrappers...")
+        uninstall_shell_scripts()
+        print("Done.")
+        sys.exit(0)
+    
     if command not in SHELL_COMMANDS:
         print(f"Unknown command: {command}")
         print_usage()

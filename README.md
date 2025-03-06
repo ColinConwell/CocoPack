@@ -83,10 +83,16 @@ pip install cocopack
 
 Remove everything:
 ```bash
+# First, clean up shell script wrappers
+cocopack uninstall-scripts
+
+# Then uninstall the Python package
 pip uninstall cocopack
 ```
 
 This will remove both Python and shell components. You should also remove any references to cocopack commands from your .bashrc or .zshrc.
+
+**Note**: When you run `pip uninstall cocopack`, the package will attempt to automatically clean up shell script wrappers, but it's recommended to run the explicit uninstall command first to ensure all wrappers are properly removed.
 
 ### R Package (CocoPack-R)
 

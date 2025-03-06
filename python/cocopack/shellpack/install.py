@@ -1,10 +1,11 @@
 """
-Shell script installation utilities.
+Shell script installation and uninstallation utilities.
 """
 import os
 import sys
 import site
 import shutil
+import atexit
 from pathlib import Path
 
 def get_shell_scripts_dir():
@@ -106,6 +107,64 @@ def install_shell_scripts():
     if scripts_dir.exists():
         for script_file in scripts_dir.glob('*.sh'):
             create_script_symlink(script_file, bin_dir, f"scripts-{script_file.name}")
+
+def uninstall_shell_scripts():
+    """Uninstall shell scripts from the bin directory"""
+    shell_dir = get_shell_scripts_dir()
+    if not shell_dir:
+        return  # No shell scripts directory found
+    
+    bin_dir = get_bin_dir()
+    if not bin_dir:
+        return  # No bin directory found
+    
+    # Remove main shell scripts
+    for script_file in shell_dir.glob('*.sh'):
+        script_name = script_file.name.replace('.sh', '')
+        wrapper_path = bin_dir / f"cocopack-{script_name}"
+        if wrapper_path.exists():
+            try:
+                wrapper_path.unlink()
+                print(f"Removed wrapper: {wrapper_path}")
+            except Exception as e:
+                print(f"Failed to remove {wrapper_path}: {e}")
+    
+    # Remove helper scripts
+    helpers_dir = shell_dir / 'helpers'
+    if helpers_dir.exists():
+        for script_file in helpers_dir.glob('*.sh'):
+            wrapper_path = bin_dir / f"cocopack-helpers-{script_file.name.replace('.sh', '')}"
+            if wrapper_path.exists():
+                try:
+                    wrapper_path.unlink()
+                    print(f"Removed wrapper: {wrapper_path}")
+                except Exception as e:
+                    print(f"Failed to remove {wrapper_path}: {e}")
+    
+    # Remove utility scripts
+    scripts_dir = shell_dir / 'scripts'
+    if scripts_dir.exists():
+        for script_file in scripts_dir.glob('*.sh'):
+            wrapper_path = bin_dir / f"cocopack-scripts-{script_file.name.replace('.sh', '')}"
+            if wrapper_path.exists():
+                try:
+                    wrapper_path.unlink()
+                    print(f"Removed wrapper: {wrapper_path}")
+                except Exception as e:
+                    print(f"Failed to remove {wrapper_path}: {e}")
+
+# Register the uninstall function to be called on package uninstall
+# This will be triggered when pip runs the uninstall command
+def register_uninstall():
+    """Register the uninstallation function with atexit"""
+    atexit.register(uninstall_shell_scripts)
+
+# Try to register the uninstall hook when this module is imported
+try:
+    register_uninstall()
+except Exception:
+    # If registration fails, it's not critical
+    pass
 
 if __name__ == "__main__":
     install_shell_scripts()
