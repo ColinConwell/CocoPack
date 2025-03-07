@@ -58,13 +58,17 @@ Repository = "https://github.com/ColinConwell/Coco-Pack.git"
 BugTracker = "https://github.com/ColinConwell/Coco-Pack/issues"
 
 [tool.hatch.build]
-packages = ["python/cocopack"]
+packages = []
+sources = ["python"]
 # Include shell scripts in package data
 artifacts = [
     "shell/scripts/*.sh",
     "shell/helpers/*.sh",
     "shell/*.sh",
 ]
+
+[tool.hatch.build.force-include]
+"python/cocopack" = "cocopack"
 
 # New section for shell script installation
 [tool.hatch.build.targets.wheel.scripts]
