@@ -58,8 +58,6 @@ Repository = "https://github.com/ColinConwell/Coco-Pack.git"
 BugTracker = "https://github.com/ColinConwell/Coco-Pack/issues"
 
 [tool.hatch.build]
-packages = []
-sources = ["python"]
 # Include shell scripts in package data
 artifacts = [
     "shell/scripts/*.sh",
@@ -67,8 +65,16 @@ artifacts = [
     "shell/*.sh",
 ]
 
-[tool.hatch.build.force-include]
-"python/cocopack" = "cocopack"
+[tool.hatch.build.targets.wheel]
+only-packages = false
+sources = ["python"]
+
+[tool.hatch.build.targets.sdist]
+only-packages = false
+sources = ["python"]
+
+[tool.hatch.build.sources]
+"python" = "." # This is the default source, but we need to specify it explicitly
 
 # New section for shell script installation
 [tool.hatch.build.targets.wheel.scripts]
