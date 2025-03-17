@@ -1,6 +1,6 @@
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["setuptools>=64.0"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "cocopack"
@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "Programmatic toolkits for Python and shell scripting"
 readme = "README.md"
 requires-python = ">=3.7"
-license = "GPL-3.0-only"
+license = {text = "GPL-3.0-only"}
 authors = [
     { name = "Colin Conwell", email = "colinconwell@gmail.com" },
 ]
@@ -30,7 +30,6 @@ classifiers = [
 
 [project.optional-dependencies]
 shell = []
-namespaced = []
 dev = [
     "pytest>=7.0.0",
     "black>=23.0.0",
@@ -41,47 +40,12 @@ dev = [
 cocopack = "cocopack.shellpack.cli:main"
 cocopack-install = "cocopack.shellpack.install:install_shell_scripts"
 
-# Direct shell commands
-color-wrap = "cocopack.shellpack.commands:color_wrap"
-show-symlinks = "cocopack.shellpack.commands:show_symlinks"
-show-storage = "cocopack.shellpack.commands:show_storage"
-safe-remove = "cocopack.shellpack.commands:safe_remove"
-recursive-cd = "cocopack.shellpack.commands:rcd"
-move-with-symlink = "cocopack.shellpack.commands:move_with_symlink"
-split-path = "cocopack.shellpack.commands:split_path"
-path-cleanup = "cocopack.shellpack.commands:path_cleanup"
-
 [project.urls]
 Homepage = "https://github.com/ColinConwell/Coco-Pack"
 Documentation = "https://github.com/ColinConwell/Coco-Pack/wiki"
 Repository = "https://github.com/ColinConwell/Coco-Pack.git"
 BugTracker = "https://github.com/ColinConwell/Coco-Pack/issues"
 
-[tool.hatch.build]
-# Include shell scripts in package data
-artifacts = [
-    "shell/scripts/*.sh",
-    "shell/helpers/*.sh",
-    "shell/*.sh",
-]
-
-[tool.hatch.build.targets.wheel]
-only-packages = false
-sources = ["python"]
-
-[tool.hatch.build.targets.sdist]
-only-packages = false
-sources = ["python"]
-
-[tool.hatch.build.sources]
-"python" = "." # This is the default source, but we need to specify it explicitly
-
-# New section for shell script installation
-[tool.hatch.build.targets.wheel.scripts]
-cocopack-colorcode = "shell/colorcode.sh"
-cocopack-prompt = "shell/prompt.sh"
-cocopack-ezshell = "shell/ezshell.sh"
-cocopack-jekyll = "shell/helpers/jekyll.sh"
 
 [tool.hatch.envs.docs]
 dependencies = [

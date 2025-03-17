@@ -1,13 +1,28 @@
-import os, sys, subprocess
+import os, sys, subprocess, importlib
 from pathlib import Path
 from warnings import warn
 
 from .install import uninstall_shell_scripts
 
+# Core shell scripts
 SHELL_COMMANDS = {
     'ezshell': 'ezshell.sh',
     'colorcode': 'colorcode.sh',
     'prompt': 'prompt.sh',
+}
+
+# Direct commands that can be run via the cocopack CLI
+DIRECT_COMMANDS = {
+    'color-wrap': {'module': 'commands', 'function': 'color_wrap'},
+    'symlinks': {'module': 'commands', 'function': 'show_symlinks'},
+    'storage': {'module': 'commands', 'function': 'show_storage'},
+    'safe-remove': {'module': 'commands', 'function': 'safe_remove'},
+    'rcd': {'module': 'commands', 'function': 'rcd'},
+    'move-with-symlink': {'module': 'commands', 'function': 'move_with_symlink'},
+    'split-path': {'module': 'commands', 'function': 'split_path'},
+    'path-cleanup': {'module': 'commands', 'function': 'path_cleanup'},
+    'install': {'module': 'install', 'function': 'install_direct_scripts'},
+    'uninstall': {'module': 'install', 'function': 'uninstall_shell_scripts'},
 }
 
 def get_script_path(script_name):
@@ -43,13 +58,20 @@ def run_script(script_path, *args):
 def print_usage():
     """Print usage information"""
     print("Usage: cocopack <command> [args...]")
-    print("\nAvailable commands:")
-    for cmd in SHELL_COMMANDS:
+    
+    print("\nShell script commands:")
+    for cmd in sorted(SHELL_COMMANDS.keys()):
         print(f"  {cmd}")
-    print("\nSpecial commands:")
-    print("  uninstall-scripts - Remove shell script wrappers from bin directory")
+    
+    print("\nDirect commands:")
+    for cmd in sorted(DIRECT_COMMANDS.keys()):
+        print(f"  {cmd}")
+    
     print("\nFor command-specific help:")
     print("  cocopack <command> --help")
+    
+    print("\nTo install direct commands (for use without 'cocopack' prefix):")
+    print("  cocopack install")
 
 def source_shell_script(script_path, *args):
     """Source a shell script and run a command"""
@@ -84,34 +106,62 @@ def source_shell_script(script_path, *args):
     
     return os.system(cmd)
 
+def run_direct_command(command, args):
+    """Run a direct command from the commands module"""
+    try:
+        cmd_info = DIRECT_COMMANDS[command]
+        module_name = f"cocopack.shellpack.{cmd_info['module']}"
+        function_name = cmd_info['function']
+        
+        # Import the module dynamically
+        module = importlib.import_module(module_name)
+        function = getattr(module, function_name)
+        
+        # Set sys.argv for the function (which might access it)
+        old_argv = sys.argv
+        sys.argv = [command] + args
+        
+        try:
+            # Call the function
+            result = function()
+            if isinstance(result, int):
+                return result
+            return 0
+        finally:
+            # Restore sys.argv
+            sys.argv = old_argv
+    except (ImportError, AttributeError) as e:
+        print(f"Error executing command '{command}': {e}")
+        return 1
+
 def main():
     if len(sys.argv) < 2 or sys.argv[1] in ['-h', '--help']:
         print_usage()
         sys.exit(0)
 
     command = sys.argv[1]
-    
-    # Handle special commands
-    if command == 'uninstall-scripts':
-        print("Uninstalling shell script wrappers...")
-        uninstall_shell_scripts()
-        print("Done.")
-        sys.exit(0)
-    
-    if command not in SHELL_COMMANDS:
-        print(f"Unknown command: {command}")
-        print_usage()
-        sys.exit(1)
-
-    script_path = get_script_path(SHELL_COMMANDS[command])
-    if not script_path.exists():
-        print(f"Script not found: {script_path}")
-        sys.exit(1)
-
-    # Pass remaining arguments to the script
     args = sys.argv[2:]
-    exit_code = source_shell_script(script_path, *args)
-    sys.exit(exit_code >> 8)  # Convert shell exit code to Python exit code
+    
+    # Check if it's a direct command
+    if command in DIRECT_COMMANDS:
+        exit_code = run_direct_command(command, args)
+        sys.exit(exit_code)
+    
+    # Check if it's a shell script command
+    if command in SHELL_COMMANDS:
+        script_path = get_script_path(SHELL_COMMANDS[command])
+        if not script_path.exists():
+            print(f"Script not found: {script_path}")
+            sys.exit(1)
+        
+        # Pass remaining arguments to the script
+        exit_code = source_shell_script(script_path, *args)
+        sys.exit(exit_code >> 8)  # Convert shell exit code to Python exit code
+    
+    # Unknown command
+    print(f"Unknown command: {command}")
+    print_usage()
+    sys.exit(1)
 
 if __name__ == '__main__':
     main() 

@@ -40,16 +40,16 @@ cocopack-install
 
 ### Python + Shell
 
-Install everything (with direct shell commands):
+Install everything:
 
 ```bash
 pip install "cocopack[shell]"
 ```
 
-After installation, shell commands are available directly:
+After installation, shell commands are available in two formats:
 
 ```bash
-# Use shell commands directly (default)
+# Use shell commands directly
 path-cleanup --remove-duplicates --apply
 color-wrap RED "This text will be red!"
 
@@ -58,19 +58,6 @@ cocopack ezshell path_cleanup --remove-duplicates --apply
 cocopack colorcode
 ```
 
-### Namespace-Only Installation
-
-If you prefer to keep all commands under the cocopack namespace:
-```bash
-pip install "cocopack[namespaced]"
-```
-
-This will only install the `cocopack` command:
-```bash
-cocopack ezshell path_cleanup --remove-duplicates --apply
-cocopack prompt
-cocopack colorcode
-```
 
 ### Python Package Only
 
@@ -78,6 +65,8 @@ Install just the Python utilities:
 ```bash
 pip install cocopack
 ```
+
+This also installs both direct and namespaced shell commands, but doesn't emphasize the shell functionality.
 
 ### Uninstallation
 
@@ -158,13 +147,13 @@ path_cleanup --remove-duplicates --remove-empties --apply
 <details>
 <summary><strong>Installation Options Explained</strong></summary>
 
-1. **Full Installation** (`pip install "cocopack[shell]"`):
-   - Users get the cocopack namespace command (e.g., `cocopack colorcode RED "text"`)
-   - Users get the direct shell script wrappers (e.g., `cocopack-colorcode RED "text"`)
-   - Users get the direct Python function wrappers (e.g., `color-wrap RED "text"`)
+1. **Standard Installation** (`pip install cocopack`):
+   - Installs the Python package with all commands available
+   - Both namespaced commands (e.g., `cocopack colorcode RED "text"`) and direct commands (e.g., `color-wrap RED "text"`) are available
 
-2. **Namespace-Only Installation** (`pip install "cocopack[namespaced]"`):
-   - Users only get the cocopack namespace command (e.g., `cocopack colorcode RED "text"`)
+2. **Shell Installation** (`pip install "cocopack[shell]"`):
+   - Same as standard installation but emphasizes shell functionality
+   - All commands are available in both namespaced and direct forms
 </details>
 
 ### Presentation & Figure Support

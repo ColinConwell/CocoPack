@@ -39,9 +39,23 @@ def get_bin_dir():
     
     return bin_dir
 
-def create_script_symlink(src_path, bin_dir, script_name):
-    """Create a wrapper script for a shell script"""
-    dest_path = bin_dir / f"cocopack-{script_name.replace('.sh', '')}"
+def create_script_symlink(src_path, bin_dir, script_name, namespaced=True):
+    """Create a wrapper script for a shell script
+    
+    Args:
+        src_path: Path to the source script
+        bin_dir: Directory to install wrapper to
+        script_name: Name of the script
+        namespaced: If True, prefix with 'cocopack-', otherwise use direct name
+    """
+    # Determine the destination path
+    if namespaced:
+        dest_path = bin_dir / f"cocopack-{script_name.replace('.sh', '')}"
+    else:
+        # For direct commands, use the simplified name
+        script_base = script_name.replace('.sh', '')
+        # Convert to kebab-case
+        dest_path = bin_dir / f"{script_base.replace('_', '-')}"
     
     # Check if script exists
     if dest_path.exists():
@@ -82,8 +96,46 @@ fi
 """)
         os.chmod(dest_path, 0o755)  # Make executable
 
+def create_python_command_wrapper(bin_dir, command_name, module_path, function_name, namespaced=True):
+    """Create a wrapper script for a Python function
+    
+    Args:
+        bin_dir: Directory to install wrapper to
+        command_name: Name of the command (will be converted to kebab-case)
+        module_path: Python module path
+        function_name: Function name in the module
+        namespaced: If True, prefix with 'cocopack-', otherwise use direct name
+    """
+    # Convert command_name to kebab-case if needed
+    kebab_command = command_name.replace('_', '-')
+    
+    # Determine destination path
+    if namespaced:
+        dest_path = bin_dir / f"cocopack-{kebab_command}"
+    else:
+        dest_path = bin_dir / kebab_command
+    
+    # Check if script exists
+    if dest_path.exists():
+        dest_path.unlink()  # Remove existing file or link
+    
+    # Create wrapper script
+    with open(dest_path, 'w') as f:
+        f.write(f"""#!/usr/bin/env python
+# This is an auto-generated wrapper for CocoPack
+# Module: {module_path}
+# Function: {function_name}
+
+import sys
+from {module_path} import {function_name}
+
+if __name__ == "__main__":
+    sys.exit({function_name}())
+""")
+        os.chmod(dest_path, 0o755)  # Make executable
+
 def install_shell_scripts():
-    """Install shell scripts to the bin directory"""
+    """Install shell scripts to the bin directory (with namespace prefix)"""
     shell_dir = get_shell_scripts_dir()
     if not shell_dir:
         return  # No shell scripts directory found
@@ -94,19 +146,54 @@ def install_shell_scripts():
     
     # Install main shell scripts
     for script_file in shell_dir.glob('*.sh'):
-        create_script_symlink(script_file, bin_dir, script_file.name)
+        create_script_symlink(script_file, bin_dir, script_file.name, namespaced=True)
     
     # Install helper scripts
     helpers_dir = shell_dir / 'helpers'
     if helpers_dir.exists():
         for script_file in helpers_dir.glob('*.sh'):
-            create_script_symlink(script_file, bin_dir, f"helpers-{script_file.name}")
+            create_script_symlink(script_file, bin_dir, f"helpers-{script_file.name}", namespaced=True)
     
     # Install utility scripts
     scripts_dir = shell_dir / 'scripts'
     if scripts_dir.exists():
         for script_file in scripts_dir.glob('*.sh'):
-            create_script_symlink(script_file, bin_dir, f"scripts-{script_file.name}")
+            create_script_symlink(script_file, bin_dir, f"scripts-{script_file.name}", namespaced=True)
+    
+    print("Shell scripts installed with namespace prefix (cocopack-*).")
+    print("To install direct commands, run: cocopack install")
+
+def install_direct_scripts():
+    """Install direct command scripts (without namespace prefix)"""
+    from .cli import DIRECT_COMMANDS
+    
+    bin_dir = get_bin_dir()
+    if not bin_dir:
+        print("Error: Could not determine bin directory for script installation")
+        return 1
+    
+    print("Installing direct command scripts...")
+    count = 0
+    
+    # Install Python command wrappers
+    for cmd_name, cmd_info in DIRECT_COMMANDS.items():
+        if cmd_name in ['install', 'uninstall']:
+            # Skip the meta-commands
+            continue
+            
+        module_path = f"cocopack.shellpack.{cmd_info['module']}"
+        function_name = cmd_info['function']
+        
+        try:
+            create_python_command_wrapper(bin_dir, cmd_name, module_path, function_name, namespaced=False)
+            print(f"Installed: {cmd_name}")
+            count += 1
+        except Exception as e:
+            print(f"Error installing {cmd_name}: {e}")
+    
+    print(f"Successfully installed {count} direct command scripts.")
+    print("These commands can now be used directly without the 'cocopack' prefix.")
+    return 0
 
 def uninstall_shell_scripts():
     """Uninstall shell scripts from the bin directory"""
@@ -118,7 +205,7 @@ def uninstall_shell_scripts():
     if not bin_dir:
         return  # No bin directory found
     
-    # Remove main shell scripts
+    # Remove main shell scripts (namespaced)
     for script_file in shell_dir.glob('*.sh'):
         script_name = script_file.name.replace('.sh', '')
         wrapper_path = bin_dir / f"cocopack-{script_name}"
@@ -129,7 +216,7 @@ def uninstall_shell_scripts():
             except Exception as e:
                 print(f"Failed to remove {wrapper_path}: {e}")
     
-    # Remove helper scripts
+    # Remove helper scripts (namespaced)
     helpers_dir = shell_dir / 'helpers'
     if helpers_dir.exists():
         for script_file in helpers_dir.glob('*.sh'):
@@ -141,7 +228,7 @@ def uninstall_shell_scripts():
                 except Exception as e:
                     print(f"Failed to remove {wrapper_path}: {e}")
     
-    # Remove utility scripts
+    # Remove utility scripts (namespaced)
     scripts_dir = shell_dir / 'scripts'
     if scripts_dir.exists():
         for script_file in scripts_dir.glob('*.sh'):
@@ -152,6 +239,24 @@ def uninstall_shell_scripts():
                     print(f"Removed wrapper: {wrapper_path}")
                 except Exception as e:
                     print(f"Failed to remove {wrapper_path}: {e}")
+    
+    # Also uninstall direct command scripts
+    from .cli import DIRECT_COMMANDS
+    
+    # Remove Python command wrappers (direct)
+    for cmd_name in DIRECT_COMMANDS:
+        if cmd_name in ['install', 'uninstall']:
+            # Skip the meta-commands
+            continue
+            
+        kebab_cmd = cmd_name.replace('_', '-')
+        wrapper_path = bin_dir / kebab_cmd
+        if wrapper_path.exists():
+            try:
+                wrapper_path.unlink()
+                print(f"Removed direct command: {wrapper_path}")
+            except Exception as e:
+                print(f"Failed to remove {wrapper_path}: {e}")
 
 # Register the uninstall function to be called on package uninstall
 # This will be triggered when pip runs the uninstall command
