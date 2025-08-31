@@ -1,10 +1,10 @@
 CocoPack Command Line Tools
-=========================
+===========================
 
 CocoPack provides several command-line utilities to help with common tasks. These tools are automatically installed when you install the package.
 
 Main Command: ``cocopack``
--------------------------
+--------------------------
 
 The main command is ``cocopack``, which provides access to all shell script utilities in the package.
 
@@ -28,12 +28,12 @@ Examples:
     cocopack ezshell show_storage
 
 Direct Commands
--------------
+---------------
 
 For convenience, CocoPack also provides direct command shortcuts for common operations:
 
 Shell Script Wrappers
-^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^
 
 These commands are wrappers around shell scripts:
 
@@ -45,7 +45,7 @@ These commands are wrappers around shell scripts:
 * ``cocopack-scripts-install_cocopack`` - Installation helper (wraps scripts/install_cocopack.sh)
 
 Python Function Wrappers
-^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 These commands are direct wrappers for functions in the shell scripts:
 
@@ -59,7 +59,7 @@ These commands are direct wrappers for functions in the shell scripts:
 * ``path-cleanup`` - Clean up a path
 
 Installation
------------
+------------
 
 All command-line tools are automatically installed when you install CocoPack:
 
@@ -74,7 +74,7 @@ If you need to manually install the shell script wrappers (in case they're missi
     cocopack-install
 
 Troubleshooting
---------------
+---------------
 
 If you encounter issues with the shell script wrappers:
 

@@ -89,8 +89,6 @@ html_theme_options = {
         },
     ],
     "navbar_end": ["theme-switcher", "navbar-icon-links"],
-    "search_bar_position": "none",  # Disable the search bar
-    "footer_items": ["copyright", "last-updated"],
     "secondary_sidebar_items": ["page-toc", "edit-this-page"],
     "pygment_light_style": "tango",
     "pygment_dark_style": "monokai",

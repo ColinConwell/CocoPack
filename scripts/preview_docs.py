@@ -22,7 +22,8 @@ from pathlib import Path
 # Define paths relative to the project root
 PROJECT_ROOT = Path(__file__).parent.parent.absolute()
 DOCS_DIR = PROJECT_ROOT / "docs"
-BUILD_DIR = DOCS_DIR / "build" / "html"
+BUILD_DIR = DOCS_DIR / "_build"
+BUILD_DIR_HTML = BUILD_DIR / "html"
 
 def build_docs():
     """Build the documentation using Sphinx"""
@@ -35,11 +36,12 @@ def build_docs():
                               stdout=subprocess.PIPE, 
                               stderr=subprocess.PIPE,
                               text=True)
+        
         if result.returncode != 0:
             print("Make failed, trying direct sphinx-build...")
             # Fallback to direct sphinx-build
             result = subprocess.run(
-                ["sphinx-build", "-b", "html", "source", "build/html"],
+                ["sphinx-build", "-b", "html", "source", BUILD_DIR_HTML],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 text=True
@@ -47,7 +49,7 @@ def build_docs():
     except FileNotFoundError:
         # If make is not found, try direct sphinx-build
         result = subprocess.run(
-            ["sphinx-build", "-b", "html", "source", "build/html"],
+            ["sphinx-build", "-b", "html", "source", BUILD_DIR_HTML],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True
@@ -63,7 +65,7 @@ def build_docs():
 
 def serve_docs(port=8000):
     """Start a simple HTTP server to serve the documentation"""
-    os.chdir(BUILD_DIR)
+    os.chdir(BUILD_DIR_HTML)
     
     class QuietHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         def log_message(self, format, *args):
@@ -92,7 +94,7 @@ def open_browser(port=8000):
 def main():
     """Main function to build and preview documentation"""
     # Ensure the build directory exists
-    BUILD_DIR.mkdir(parents=True, exist_ok=True)
+    BUILD_DIR_HTML.mkdir(parents=True, exist_ok=True)
     
     # Build the documentation
     if not build_docs():

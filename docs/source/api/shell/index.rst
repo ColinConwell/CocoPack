@@ -7,7 +7,7 @@ Shell API
 This section provides detailed documentation for the shell scripts and commands in Coco-Pack.
 
 Command Line Interface
-=====================
+======================
 
 The Coco-Pack shell utilities can be accessed through the main ``cocopack`` command:
 
@@ -16,7 +16,7 @@ The Coco-Pack shell utilities can be accessed through the main ``cocopack`` comm
     cocopack [command] [arguments]
 
 Available Commands
-=================
+==================
 
 prompt
 ------
@@ -48,10 +48,10 @@ Colorize terminal output.
     color-wrap RED "This text will be red!"
 
 Script Reference
-===============
+================
 
 colorcode.sh
------------
+------------
 
 Functions for adding color to terminal output.
 
@@ -74,16 +74,16 @@ Example usage of ``prompt_color`` in a custom bash prompt:
     PROMPT='$(prompt_color GREEN)%n@%m$(prompt_color RESET):$(prompt_color BLUE)%~$(prompt_color RESET)%# '
 
 ezshell.sh
----------
+----------
 
 General shell utilities for everyday tasks.
 
 prompt.sh
---------
+---------
 
 Prompt customization utilities.
 
 helpers/jekyll.sh
----------------
+-----------------
 
 Helper functions for Jekyll site management.

@@ -7,7 +7,7 @@ Contributing
 We welcome contributions to Coco-Pack! This guide will help you get started.
 
 Development Setup
-===============
+=================
 
 1. Clone the repository:
 
@@ -29,11 +29,11 @@ Development Setup
        pip install -e ".[docs]"
 
 Coding Standards
-==============
+================
 
-- We use Black for code formatting
 - We use isort for import sorting
 - We use mypy for type checking
+- We use Black for code formatting
 
 You can run these tools with:
 
@@ -49,7 +49,7 @@ You can run these tools with:
     mypy python/cocopack
 
 Testing
-======
+=======
 
 We use pytest for testing. Run the tests with:
 
@@ -58,7 +58,7 @@ We use pytest for testing. Run the tests with:
     pytest
 
 Pull Requests
-===========
+=============
 
 1. Fork the repository
 2. Create a new branch
@@ -73,7 +73,7 @@ Please include:
 - Documentation updates if needed
 
 Documentation
-===========
+=============
 
 To build the documentation locally:
 

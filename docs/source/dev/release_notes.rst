@@ -4,13 +4,13 @@
 Release Notes
 =============
 
-Version 0.1.0 (unreleased)
-=========================
+Version 0.1.0
+=============
 
 Initial release of Coco-Pack.
 
 Features
--------
+--------
 
 Python
 ~~~~~~
@@ -22,6 +22,11 @@ Python
 - Path operation utilities
 - Package management helpers
 
+R
+~
+
+- Basic R utility functions
+
 Shell
 ~~~~~
 
@@ -29,8 +34,3 @@ Shell
 - Path cleanup utilities
 - Color coding for terminal output
 - Jekyll helpers
-
-R
-~~
-
-- Basic R utility functions
