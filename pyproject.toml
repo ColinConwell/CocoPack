@@ -1,6 +1,6 @@
 [build-system]
-requires = ["setuptools>=64.0"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
 name = "cocopack"
@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "Programmatic toolkits for Python and shell scripting"
 readme = "README.md"
 requires-python = ">=3.7"
-license = {text = "GPL-3.0-only"}
+license = "GPL-3.0-only"
 authors = [
     { name = "Colin Conwell", email = "colinconwell@gmail.com" },
 ]
@@ -23,28 +23,51 @@ dependencies = [
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
 ]
 
 [project.optional-dependencies]
 shell = []
 dev = [
     "pytest>=7.0.0",
-    "black>=23.0.0",
     "isort>=5.0.0",
+    "black>=23.0.0",
+]
+docs = [
+    "sphinx>=7.0.0",
+    "pydata-sphinx-theme>=0.13.3",
+    "myst-parser>=1.0.0",
+    "sphinx-copybutton>=0.5.2",
+    "sphinx-design>=0.4.1",
+    "sphinxcontrib-napoleon>=0.7",
 ]
 
 [project.scripts]
 cocopack = "cocopack.shellpack.cli:main"
 cocopack-install = "cocopack.shellpack.install:install_shell_scripts"
 
-[project.urls]
-Homepage = "https://github.com/ColinConwell/Coco-Pack"
-Documentation = "https://github.com/ColinConwell/Coco-Pack/wiki"
-Repository = "https://github.com/ColinConwell/Coco-Pack.git"
-BugTracker = "https://github.com/ColinConwell/Coco-Pack/issues"
+# Hatch build configuration
+[tool.hatch.build.targets.wheel]
+packages = ["python/cocopack"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "python/cocopack",
+    "LICENSE",
+    "README.md",
+]
+exclude = [
+    "macOS",
+    "shell", 
+    "verse",
+    "xyzopt",
+    "test_env",
+    "wiki-pack",
+    "docs",
+    "scripts",
+]
 
 
 [tool.hatch.envs.docs]
@@ -56,6 +79,7 @@ dependencies = [
     "sphinx-design>=0.4.1",
     "sphinxcontrib-napoleon>=0.7",
 ]
+
 [tool.hatch.envs.docs.scripts]
 build = "sphinx-build -b html docs/source docs/build"
 serve = "python -m http.server --directory docs/build 8000"
@@ -66,13 +90,13 @@ dependencies = [
     "black>=23.0.0",
     "isort>=5.0.0",
 ]
-python = "^3.7"
 
 [tool.hatch.envs.test]
 dependencies = [
     "pytest>=7.0.0",
     "pytest-cov>=4.0.0",
 ]
+
 [tool.hatch.envs.test.scripts]
 test = "pytest {args:tests}"
 test-cov = "pytest --cov=cocopack {args:tests}"
@@ -93,11 +117,17 @@ type = "mypy --install-types --non-interactive {args:python/cocopack}"
 check = ["style", "type"]
 
 [tool.black]
-line-length = 88
 target-version = ["py37"]
+line-length = 88
 include = '\.pyi?$'
 
 [tool.isort]
 profile = "black"
 line_length = 88
 multi_line_output = 3
+
+[project.urls]
+Homepage = "https://github.com/ColinConwell/Coco-Pack"
+Documentation = "https://github.com/ColinConwell/Coco-Pack/wiki"
+Repository = "https://github.com/ColinConwell/Coco-Pack.git"
+BugTracker = "https://github.com/ColinConwell/Coco-Pack/issues"
