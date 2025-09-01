@@ -1,5 +1,5 @@
-CocoPack Command Line Tools
-===========================
+Command Line Tools
+==================
 
 CocoPack provides several command-line utilities to help with common tasks. These tools are automatically installed when you install the package.
 

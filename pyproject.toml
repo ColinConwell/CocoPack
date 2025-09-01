@@ -51,16 +51,19 @@ cocopack-install = "cocopack.shellpack.install:install_shell_scripts"
 # Hatch build configuration
 [tool.hatch.build.targets.wheel]
 packages = ["python/cocopack"]
+# Include shell scripts as package data
+[tool.hatch.build.targets.wheel.shared-data]
+"shell" = "share/cocopack/shell"
 
 [tool.hatch.build.targets.sdist]
 include = [
     "python/cocopack",
+    "shell",
     "LICENSE",
     "README.md",
 ]
 exclude = [
     "macOS",
-    "shell", 
     "verse",
     "xyzopt",
     "test_env",

@@ -13,9 +13,31 @@ def get_shell_scripts_dir():
     shell_dir = package_dir / 'shell'
     
     if not shell_dir.exists():
-        # Try repository root
+        # Try repository root (for development installs)
         repo_root = Path(__file__).parent.parent.parent.parent
         shell_dir = repo_root / 'shell'
+    
+    if not shell_dir.exists():
+        # Try installed shared-data location (for PyPI installs)
+        import sys
+        if hasattr(sys, 'real_prefix') or (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix):
+            # We're in a virtual environment
+            shared_data_dir = Path(sys.prefix) / 'share' / 'cocopack' / 'shell'
+        else:
+            # We're in a regular Python installation
+            shared_data_dir = Path(sys.prefix) / 'share' / 'cocopack' / 'shell'
+            
+            # For user installs, also try user directory
+            if not shared_data_dir.exists():
+                try:
+                    import site
+                    user_base = Path(site.getuserbase()) if hasattr(site, 'getuserbase') else Path.home() / '.local'
+                    shared_data_dir = user_base / 'share' / 'cocopack' / 'shell'
+                except ImportError:
+                    pass
+        
+        if shared_data_dir.exists():
+            shell_dir = shared_data_dir
     
     return shell_dir if shell_dir.exists() else None
 

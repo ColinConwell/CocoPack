@@ -27,19 +27,14 @@ DIRECT_COMMANDS = {
 
 def get_script_path(script_name):
     """Get the full path to a shell script"""
-    # First look in the package directory
-    package_dir = Path(__file__).parent.parent
-    script_path = package_dir / 'shell' / script_name
+    # Use the same logic as install.py to find shell scripts
+    from .install import get_shell_scripts_dir
+    shell_dir = get_shell_scripts_dir()
     
-    if script_path.exists():
-        return script_path
-    
-    # If not found, look in the repository root
-    repo_root = Path(__file__).parent.parent.parent.parent
-    script_path = repo_root / 'shell' / script_name
-    
-    if script_path.exists():
-        return script_path
+    if shell_dir:
+        script_path = shell_dir / script_name
+        if script_path.exists():
+            return script_path
     
     # If still not found, look in the installed scripts
     import shutil
@@ -47,7 +42,8 @@ def get_script_path(script_name):
     if cmd_path:
         return Path(cmd_path)
     
-    # Return the original path, even though it doesn't exist
+    # Return a default path (though it won't exist)
+    package_dir = Path(__file__).parent.parent
     return package_dir / 'shell' / script_name
 
 def run_script(script_path, *args):
