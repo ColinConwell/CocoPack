@@ -9,7 +9,7 @@ Functionality Status:
 - [x] Shell
 - [x] R Pack
 
-Documentation for the standalone [R](https://www.r-project.org/) package may be found at [colinconwell.github.io/Coco-Pack-R](https://colinconwell.github.io/CocoPack-R)
+Documentation and source code for the [R](https://www.r-project.org/) package may be found at [colinconwell.github.io/Coco-Pack-R](https://colinconwell.github.io/CocoPack-R)
 
 ## Quick-Start
 
@@ -32,7 +32,7 @@ pacman::p_load_gh("colinconwell/Coco-Pack-R")
 pip install "cocopack[shell]"
 ```
 
-Shell scripts are installed automatically, but if needed, you can reinstall the shell script wrapperes with:
+Shell scripts are installed automatically, but if needed, you can reinstall the shell script wrappers with:
 
 ```bash
 cocopack-install
@@ -87,7 +87,7 @@ This will remove both Python and shell components. You should also remove any re
 
 **Standalone Package**:
 
-The standalone version of the `cocopack` R package is available at [CocoPack-R](https://colinconwell.github.io/CocoPack-R/).
+The `cocopack` R package is available at [CocoPack-R](https://colinconwell.github.io/CocoPack-R/).
 
 You can install this package by running the following command:
 
@@ -95,20 +95,6 @@ You can install this package by running the following command:
 if (!require(pacman)) {install.packages("pacman")}
 pacman::p_load_gh("colinconwell/CocoPack-R")
 ```
-
-**Direct Source**:
-
-To directly source the R code from cocopack, you can run the following command:
-
-```R
-if (!require(pacman)) {install.packages("pacman")}
-pacman::p_load('devtools', 'glue')
-
-repo_url <- 'https://raw.githubusercontent.com/ColinConwell/Coco-Pack/refs/heads/main'
-remotes::source_url(glue('{repo_url}/verse/cocopack.R'))
-```
-
-See [verse/README.md](./verse/README.md) for R package installation instructions.
 
 ## Common Workflows
 

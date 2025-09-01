@@ -94,6 +94,10 @@ Add color to your terminal output:
 R Package
 =========
 
+The `cocopack` R package is available at [CocoPack-R](https://colinconwell.github.io/CocoPack-R/).
+
+You can install this package by running the following command:
+
 Load the Package
 ----------------
 
@@ -102,4 +106,10 @@ Load the Package
     if (!require(pacman)) {install.packages("pacman")}
     pacman::p_load_gh("colinconwell/Coco-Pack-R")
 
-More information as the package develops.
+Cocopack-R convenience functions include:
+
+.. code-block:: R
+
+    cocopack_r::get_data("iris")
+    cocopack_r::plot_histogram("iris$Sepal.Length")
+    cocopack_r::fit_lm("iris$Sepal.Length ~ iris$Sepal.Width")

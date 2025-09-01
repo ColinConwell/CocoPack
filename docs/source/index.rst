@@ -21,6 +21,8 @@ Features
 * **Shell CLI**: Command-line tools for common tasks and workflows
 * **R Package**: Tools for statistics, data manipulation, and visualization
 
+(Note, the R package has now been moved to a standalone package, found [here](https://github.com/ColinConwell/CocoPack-R/).)
+
 Quick Start
 -----------
 
@@ -63,7 +65,6 @@ Contents
    
    api/python/index
    api/shell/index
-   api/r/index
 
 .. toctree::
    :maxdepth: 1
