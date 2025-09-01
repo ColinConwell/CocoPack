@@ -18,16 +18,14 @@ Options:
     --verbose      Show additional output
 """
 
-import os
 import sys
-import shutil
-import argparse
-import subprocess
-import tempfile
-import time
 import venv
-from pathlib import Path
+import shutil
 import platform
+import tempfile
+import subprocess
+import argparse
+from pathlib import Path
 
 
 class ColorOutput:

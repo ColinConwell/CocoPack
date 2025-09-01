@@ -8,12 +8,11 @@ This script:
 4. Runs basic import tests to ensure the package is installable and importable
 """
 
-import os
-import sys
+import os, sys
+import venv
 import shutil
 import tempfile
 import subprocess
-import venv
 from pathlib import Path
 
 

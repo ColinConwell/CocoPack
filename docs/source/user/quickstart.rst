@@ -31,7 +31,7 @@ Convert presentations to images and PDFs:
 
 .. code-block:: python
 
-    from cocopack.figure_ops import slides_to_images, convert_all_images_to_pdf
+    from cocopack.figure_ops import slides_to_images, convert_images_to_pdf
     
     # Automatically detect file type and convert to PNG images
     slides_to_images('presentation.pptx', 'output_folder', 
@@ -40,7 +40,7 @@ Convert presentations to images and PDFs:
                      margin_size='0.5cm')
     
     # Convert to high-quality PDFs
-    convert_all_images_to_pdf('output_folder')
+    convert_images_to_pdf('output_folder')
 
 For specific presentation types:
 

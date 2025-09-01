@@ -11,6 +11,7 @@ from .figure_ops import (
     slides_to_images,
     convert_to_pdf,
     convert_images_to_pdf,
+    mogrify_images_to_pdf,
 )
 
 from .notebook import (
@@ -29,6 +30,7 @@ __all__ = [
     'slides_to_images',
     'convert_to_pdf',
     'convert_images_to_pdf',
+    'mogrify_images_to_pdf',
     
     # from notebook
     'set_autoreload',

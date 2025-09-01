@@ -1,6 +1,6 @@
 from cocopack.figure_ops import (
     slides_to_images,
-    convert_all_images_to_pdf
+    convert_images_to_pdf
 )
 
 from os.path import splitext
@@ -25,4 +25,4 @@ if __name__ == "__main__":
                      margin_size=args.margin_size)
 
     if args.pdf or args.pdf_only:
-        convert_all_images_to_pdf(args.output_path, dpi=300, pdf_only=args.pdf_only)
+        convert_images_to_pdf(args.output_path, dpi=300, pdf_only=args.pdf_only)

@@ -100,20 +100,20 @@ Example:
     # Convert a PNG image to PDF
     convert_to_pdf('image.png', dpi=300)
 
-convert_all_images_to_pdf
+convert_images_to_pdf
 -------------------------
 
-.. autofunction:: cocopack.figure_ops.convert_all_images_to_pdf
+.. autofunction:: cocopack.figure_ops.convert_images_to_pdf
     :no-index:
 
 Example:
 
 .. code-block:: python
 
-    from cocopack.figure_ops import convert_all_images_to_pdf
+    from cocopack.figure_ops import convert_images_to_pdf
     
     # Convert all PNG images in a folder to PDFs
-    convert_all_images_to_pdf('output_folder', dpi=300)
+    convert_images_to_pdf('output_folder', dpi=300)
 
 Platform Support
 ================

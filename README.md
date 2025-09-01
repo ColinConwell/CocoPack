@@ -162,13 +162,13 @@ The Python package includes presentation to image/PDF conversion functionality v
 
 Example usage:
 ```python
-from cocopack.figure_ops import slides_to_images, convert_all_images_to_pdf
+from cocopack.figure_ops import slides_to_images, convert_images_to_pdf
 
 # Convert any presentation to PNGs and crop whitespace
 slides_to_images('presentation.pptx', 'output_folder', crop_images=True)
 
 # Convert to PDFs
-convert_all_images_to_pdf('output_folder')
+convert_images_to_pdf('output_folder')
 ```
 
 Note: Keynote is available exclusively on macOS. Windows users will need to install pywin32 separately if they want to use the Windows-specific COM automation:
