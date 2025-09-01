@@ -1,11 +1,17 @@
 from . import commands as shell_commands
 from .install import install_shell_scripts
 
-__all__ = ['shell_commands', 'install_shell_scripts']
+from .commands import (
+    run_shell_command as run,
+    show_symlinks,
+    show_storage,
+    move_with_symlink,
+)
 
-# Automatically attempt to install shell scripts during import
-try:
-    install_shell_scripts()
-except Exception:
-    # Silently fail if installation fails, this is just a convenience
-    pass
+__all__ = [
+    'shell_commands',
+    'install_shell_scripts',
+    'show_symlinks',
+    'show_storage',
+    'move_with_symlink',
+]

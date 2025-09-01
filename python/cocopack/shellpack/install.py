@@ -1,10 +1,8 @@
 """
 Shell script installation and uninstallation utilities.
 """
-import os
-import sys
+import os, sys
 import site
-import shutil
 import atexit
 from pathlib import Path
 

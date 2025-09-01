@@ -5,6 +5,13 @@ import platform
 from copy import copy
 from PIL import Image, ImageChops
 
+__all__ = [
+    'slides_to_images',
+    'convert_to_pdf',
+    'convert_images_to_pdf',
+    'mogrify_images_to_pdf',
+]
+
 # Core Functions ------------------------------------------------------------
 
 def slides_to_images(input_path, output_path, filename_format='figure{:01d}.png',
@@ -235,7 +242,7 @@ def crop_whitespace(image_path, output_path=None, margin_size='1cm', dpi=300):
         crop_single_image(image_path, output_path)
 
 def convert_to_pdf(image_path, output_path=None, dpi=300, **kwargs):
-    """Convert PNG images to high-quality PDF files.
+    """Convert {PNG, JPEG, TIFF} images to high-quality PDF files.
     
     Args:
         image_path (str): Path to an image file or a directory containing image files.
@@ -253,7 +260,7 @@ def convert_to_pdf(image_path, output_path=None, dpi=300, **kwargs):
     
     if os.path.isdir(image_path):
         for filename in os.listdir(image_path):
-            if filename.lower().endswith('.png'):
+            if filename.lower().endswith('.png', '.jpg', '.jpeg', '.tiff', '.tif'):
                 source_file = os.path.join(image_path, filename)
                 output_file = os.path.join(output_path, os.path.splitext(filename)[0] + '.pdf')
                 print(f'Converting {source_file} to {output_file}...')
@@ -276,31 +283,33 @@ def convert_to_pdf(image_path, output_path=None, dpi=300, **kwargs):
     if kwargs.get('pdf_only', False):
         os.remove(image_path)
 
-def convert_all_images_to_pdf(input_path, dpi=300, **kwargs):
-    """Convert all PNG images in a directory and its subdirectories to PDF files.
+def convert_images_to_pdf(input_path, dpi=300, **kwargs):
+    """Convert all {PNG, JPEG, TIFF} images in a directory and its subdirectories to PDF files.
     
     Args:
-        input_path (str): Path to the directory containing PNG images.
+        input_path (str): Path to the directory containing {PNG, JPEG, TIFF} images.
         dpi (int, optional): DPI for the output PDF files. Defaults to 300.
         **kwargs: Additional keyword arguments passed to convert_to_pdf.
             pdf_only (bool): If True, removes the original image files. Defaults to False.
     """
-    image_files = glob.glob(os.path.join(input_path, '**/*.png'), recursive=True)
+    image_exts = ['.png', '.jpg', '.jpeg', '.tiff', '.tif']
+    image_files = glob.glob(os.path.join(input_path, f'**/*.{",".join(image_exts)}'), recursive=True)
     for image_file in image_files:
         convert_to_pdf(image_file, None, dpi, **kwargs)
 
 def mogrify_images_to_pdf(input_path, **kwargs):
-    """Convert PNG images to PDF using ImageMagick's mogrify command.
+    """Convert {PNG, JPEG, TIFF} images to PDF using ImageMagick's mogrify command.
     
     Args:
-        input_path (str): Path to the directory containing PNG images.
+        input_path (str): Path to the directory containing {PNG, JPEG, TIFF} images.
         **kwargs: Additional keyword arguments.
             pdf_only (bool): If True, removes the original image files. Defaults to False.
             
     Note:
         This function requires ImageMagick to be installed on the system.
     """
-    image_files = glob.glob(os.path.join(input_path, '**/*.png'), recursive=True)
+    image_exts = ['.png', '.jpg', '.jpeg', '.tiff', '.tif']
+    image_files = glob.glob(os.path.join(input_path, f'**/*.{",".join(image_exts)}'), recursive=True)
     for image_file in image_files:
         subprocess.run(['mogrify', '-format', 'pdf', '-quality', '100', '-density', '300', image_file])
 

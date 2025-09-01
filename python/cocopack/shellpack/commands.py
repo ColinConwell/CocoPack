@@ -1,5 +1,25 @@
-import os, sys
+import os, sys, subprocess
 from .cli import get_script_path
+
+def run_shell_command(cmd, capture_output=False):
+    f"""Run a command in a shell
+    
+    Args:
+        cmd (str): The command to run
+        capture_output (bool): Whether to capture the output of the command
+        
+    Returns:
+        int: The exit code of the command
+        
+    Examples:
+        >>> run_shell_command("ls -lna | grep .txt")
+        # Prints all .txt files in current directory
+    """
+    if capture_output:
+        output = subprocess.run(cmd, shell=True, check=True, capture_output=True)
+        return output.stdout if output.returncode == 0 else output.stderr
+    else: # default to os
+        return os.system(cmd)
 
 def run_shell_function(script_name, function_name, *args):
     """Run a shell function from a script"""
