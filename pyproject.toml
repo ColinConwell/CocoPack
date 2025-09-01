@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "cocopack"
-version = "0.1.0"
+version = "0.1.1"
 description = "Programmatic toolkits for Python and shell scripting"
 readme = "README.md"
 requires-python = ">=3.7"
